@@ -1,26 +1,30 @@
 package chatroom
 
 import (
+	"firego/src/api"
+	_ "firego/src/log"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"net/http"
 )
 
-
-func Run(){
+// Run 启动http服务器
+func Run() {
 	logrus.Info("start to run the im server!!!")
-	
-	r := gin.Default()
-	r.POST("/createroom", func(ctx *gin.Context) {
-		logrus.Info("get a con")
 
-		for k, v := range ctx.Request.PostForm {
-			logrus.Info("k:%v\n", k)
-			logrus.Info("v:%v\n", v)
-		}
+	router := gin.Default()
 
-		ctx.String(200, "success")
-	})
 
-	r.Run(":8080")
+	router.GET("/", api.Index)
+	router.GET("/board", api.CreateBoard)
+	router.GET("/pig/:name", api.Pig)
+
+
+	router.POST("/createroom",CreateRoom)
+
+
+
+	router.Run(":8080")
+
 	logrus.Info("should not run here now") // 暂时不用协成， 之后改成异步的
 }

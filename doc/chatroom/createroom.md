@@ -2,7 +2,7 @@
 
 ## 创建房间的接口
 
-### post请求
+### post请求 /createroom
 
 ### 参数
 
@@ -14,9 +14,16 @@
 
 - roomnotice: 房间的公告
 
-- passworld： 
+- passworld： 根据 isOpen 获取
 
 ### 返回
 
 - ok
 - url（/chatroom?uuid=123456） 
+
+- error
+- msg
+- code
+
+1、 
+2、

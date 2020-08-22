@@ -1,7 +1,7 @@
 package main
 
 import (
-	"firego/src/cock"
+	"firego/src/chatroom"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"strconv"
@@ -33,7 +33,8 @@ func init() {
 
 func main() {
 	logrus.Info("fire go!!!")
-	//cock.HelloWorld()
-	server.
-	
+
+	chatroom.Run()
+
+
 }

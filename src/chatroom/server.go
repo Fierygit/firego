@@ -12,9 +12,7 @@ func Run(){
 	r := gin.Default()
 	r.POST("/createroom", func(ctx *gin.Context) {
 		logrus.Info("get a con")
-		logrus.Info(ctx.PostForm("k"))
 
-		logrus.Info(ctx.Request.PostForm)
 		for k, v := range ctx.Request.PostForm {
 			logrus.Info("k:%v\n", k)
 			logrus.Info("v:%v\n", v)

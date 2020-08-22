@@ -8,13 +8,24 @@
 
 - isOpen: 0 否， 1 是
 
-- roomname： 这个房间的名字
+- roomName： 这个房间的名字
 
-- roominfo： 房间的介绍
+- roomInfo： 房间的介绍
 
-- roomnotice: 房间的公告
+- roomNotice: 房间的公告
 
-- passworld： 根据 isOpen 获取
+- password： 根据 isOpen 获取
+
+```json
+{
+    "isOpen" : 0,
+    "roomName" : "safd",
+    "roomInfo" : "fdf",
+    "roomNotice" : "Fdf",
+    "passworld" : "df"
+
+}
+```
 
 ### 返回
 

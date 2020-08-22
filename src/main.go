@@ -33,5 +33,7 @@ func init() {
 
 func main() {
 	logrus.Info("fire go!!!")
-	cock.HelloWorld()
+	//cock.HelloWorld()
+	server.
+	
 }

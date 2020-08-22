@@ -17,6 +17,7 @@ func Run() {
 
 	// 加载静态资源
 	router.Static("/static", "../static")
+	router.StaticFile("/favicon.ico", "../static/favicon.ico")
 
 	// 动态路由
 	v1 := router.Group("/v1")

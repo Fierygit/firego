@@ -18,14 +18,25 @@ func Index(c *gin.Context) {
 
 // CreateBoard 创建留言板
 func CreateBoard(c *gin.Context) {
-	id := uuid.New();
-	// TODO(创建留言的逻辑)
-	redirectURL := fmt.Sprintf("http://127.0.0.1:8080/board/%s", id)
+	id := uuid.New()
+	// TODO(创建留板言的逻辑)
+	redirectURL := fmt.Sprintf("http://127.0.0.1:8080/v1/board/%s", id)
 	c.Redirect(http.StatusFound, redirectURL)
 }
 
 // EnterBoard 进入留言板
 func EnterBoard(c *gin.Context) {
+	// TODO
 	id := c.Param("id")
 	logrus.Info(id)
+}
+
+// CreateMessage 创建留言
+func CreateMessage(c *gin.Context) {
+	// TODO
+}
+
+// GetMessage 获取留言
+func GetMessage(c *gin.Context) {
+	// TODO
 }

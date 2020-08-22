@@ -15,10 +15,14 @@ func Run() {
 
 	router := gin.Default()
 
+
 	router.GET("/", api.Index)
 	router.GET("/board", api.CreateBoard)
 	router.GET("/board/:id", api.EnterBoard)
 
+
+	router.POST("/createroom",CreateRoom)
 	router.Run(":8080")
+
 	logrus.Info("should not run here now") // 暂时不用协成， 之后改成异步的
 }

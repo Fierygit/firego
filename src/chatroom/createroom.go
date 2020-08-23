@@ -28,8 +28,8 @@ func CreateRoom(ctx *gin.Context) {
 	}
 
 	logrus.Info(req)
-	if err2 := checkArg(req); err2 != nil {
-		ctx.JSON(200, gin.H{"msg": err2.Error()})
+	if err2 := checkReq(req); err2 != nil {
+		ctx.JSON(http.StatusOK, gin.H{"msg": err2.Error()})
 		return
 	}
 	uuid := createRoom(req)
@@ -46,7 +46,7 @@ func createRoom(req *CreateRoomReq) string {
 	return id.String()
 }
 
-func checkArg(req *CreateRoomReq) error {
+func checkReq(req *CreateRoomReq) error {
 	if req.IsOpen != 0 && req.IsOpen != 1 {
 		return errors.New("isOpen error")
 	}

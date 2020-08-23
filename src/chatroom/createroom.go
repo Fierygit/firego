@@ -14,6 +14,7 @@ type CreateRoomArg struct {
 	Password   string `form:"password" `
 }
 
+
 func CreateRoom(ctx *gin.Context) {
 
 	arg := &CreateRoomArg{}

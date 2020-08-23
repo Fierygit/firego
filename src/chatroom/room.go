@@ -13,7 +13,7 @@ type Client struct {
 type Message struct {
 	Type     int         // 消息类型， 0 为普通消息， 1 为提示消息等等
 	Info     interface{} // 存储消息
-	SendTime time.Time       // 存储这条消息的时间
+	SendTime time.Time   // 存储这条消息的时间
 }
 
 type RoomInfo struct {
@@ -24,7 +24,7 @@ type RoomInfo struct {
 type Room struct {
 	RoomInfo  RoomInfo
 	ClientNum int                //	在线的人数
-	Messages  []*Message         // 	消息列表， 索引号按时间排序
+	Messages  []*Message         // 消息列表， 索引号按时间排序
 	Clients   map[string]*Client //	SessionId -> Client
 }
 
@@ -35,25 +35,38 @@ type ChatRoom struct {
 }
 
 // -------------------------- operation -------------------------------------
-// --------------------------------Room-------------------------------
-func (room *Room) fooBar() {
+// --------------------------------Room--------------------------------------
+func (room *Room) AddMessage(message *Message) {
+	messages := room.Messages
+	room.Messages = append(messages, message)
+}
+
+// 从 0 开始
+func (room *Room) GetMessage(start int, end int) ([]*Message, string) {
+	if start > end {
+		return nil, ""
+	}
+	maxLen := len(room.Messages) - 1
+	if end > maxLen {
+		end = maxLen
+	}
+	return room.Messages[start:end], ""
+}
+
+func (room *Room) AddClient(sessionId string, client *Client) {
+	room.Clients[sessionId] = client
+}
+
+func (room *Room) RemoveClient() {
 
 }
 
-func (room *Room) addMessage() {
+func (room *Room) GetClient() {
 
 }
 
-func (room *Room) getMessage(start int, end int) {
-
-}
-
-func (room *Room) addClient() {
-
-}
-
-func (room *Room) removeClient() {
-
+func (room *Room) findClientBySessionId(id string) bool {
+	return room.Clients[id] != nil
 }
 
 //---------------------------chatRoom-------------------------------------
@@ -76,6 +89,10 @@ func (chatRoom *ChatRoom) AddRoom(uuid string, createRoomArg *CreateRoomArg) boo
 		Clients:   map[string]*Client{}}
 	chatRoom.Rooms[uuid] = &room
 	return true
+}
+
+func (chatRoom *ChatRoom) GetRoom(uuid string) *Room {
+	return chatRoom.Rooms[uuid]
 }
 
 func (chatRoom *ChatRoom) RemoveRoom(uuid string) {

@@ -5,8 +5,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// EnterBoard 进入留言板
-func EnterBoard(c *gin.Context) {
+// EnterRoom 进入留言板
+func EnterRoom(c *gin.Context) {
 	// TODO
 	id := c.Param("id")
 	logrus.Info(id)

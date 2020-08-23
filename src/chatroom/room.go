@@ -17,7 +17,7 @@ type Message struct {
 }
 
 type RoomInfo struct {
-	CreateInfo *CreateRoomArg // 创建房间必要的参数
+	CreateInfo *CreateRoomReq // 创建房间必要的参数
 	CreateTime time.Time      // 创建的时间
 }
 
@@ -63,7 +63,7 @@ func InitChatRoom() *ChatRoom {
 
 // 当已经存在房间了放回false
 // todo 冲突，还是重复了？
-func (chatRoom *ChatRoom) AddRoom(uuid string, createRoomArg *CreateRoomArg) bool {
+func (chatRoom *ChatRoom) AddRoom(uuid string, createRoomArg *CreateRoomReq) bool {
 	if chatRoom.Rooms[uuid] != nil {
 		return false
 	}

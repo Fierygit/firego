@@ -23,20 +23,3 @@ func CreateBoard(c *gin.Context) {
 	redirectURL := fmt.Sprintf("http://127.0.0.1:8080/v1/board/%s", id)
 	c.Redirect(http.StatusFound, redirectURL)
 }
-
-// EnterBoard 进入留言板
-func EnterBoard(c *gin.Context) {
-	// TODO
-	id := c.Param("id")
-	logrus.Info(id)
-}
-
-// CreateMessage 创建留言
-func CreateMessage(c *gin.Context) {
-	// TODO
-}
-
-// GetMessage 获取留言
-func GetMessage(c *gin.Context) {
-	// TODO
-}

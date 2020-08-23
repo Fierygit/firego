@@ -14,7 +14,7 @@ type CreateRoomArg struct {
 	Password   string `form:"password" `
 }
 
-
+// CreateBoard 创建留言板
 func CreateRoom(ctx *gin.Context) {
 
 	arg := &CreateRoomArg{}

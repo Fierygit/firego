@@ -1,7 +1,6 @@
 package chatroom
 
 import (
-	"firego/src/api"
 	_ "firego/src/log" // 初始化logrus
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -21,11 +20,11 @@ func Run() {
 
 	// 动态路由
 	v1 := router.Group("/v1")
-	v1.GET("/", api.Index)
-	v1.GET("/board", api.CreateBoard)
-	v1.GET("/board/:id", api.EnterBoard)
-	v1.GET("/message", api.GetMessage)
-	v1.POST("/message", api.CreateMessage)
+	v1.GET("/", Index)
+	v1.GET("/board", CreateBoard)
+	v1.GET("/board/:id", EnterBoard)
+	v1.GET("/message", GetMessage)
+	v1.POST("/message", CreateMessage)
 	v1.POST("/createroom", CreateRoom)
 
 	router.Run(":8080")

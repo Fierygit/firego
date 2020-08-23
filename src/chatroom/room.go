@@ -11,7 +11,7 @@ type Client struct {
 }
 
 type Message struct {
-	Type     int         // 消息类型， 0 为普通消息， 1 为提示消息等等
+	Type     int8        // 消息类型， 0 为普通消息， 1 为提示消息等等
 	Info     interface{} // 存储消息
 	SendTime time.Time   // 存储这条消息的时间
 }
@@ -35,6 +35,16 @@ type ChatRoom struct {
 }
 
 // -------------------------- operation -------------------------------------
+//--------------------------------Message--------------------------------------
+func MakeMessage(mType int8, info interface{}) *Message {
+	return &Message{mType, info, time.Now()}
+}
+
+//--------------------------------RoomInfo--------------------------------------
+func MakeRoomInfo(CreateInfo *CreateRoomReq) *RoomInfo {
+	return &RoomInfo{CreateInfo, time.Now()}
+}
+
 // --------------------------------Room--------------------------------------
 func (room *Room) AddMessage(message *Message) {
 	messages := room.Messages
@@ -57,12 +67,12 @@ func (room *Room) AddClient(sessionId string, client *Client) {
 	room.Clients[sessionId] = client
 }
 
-func (room *Room) RemoveClient() {
-
+func (room *Room) RemoveClient(sessionId string) {
+	room.Clients[sessionId] = nil
 }
 
-func (room *Room) GetClient() {
-
+func (room *Room) GetClient(sessionId string) *Client {
+	return room.Clients[sessionId]
 }
 
 func (room *Room) findClientBySessionId(id string) bool {

@@ -84,7 +84,7 @@ func InitChatRoom() *ChatRoom {
 	return &ChatRoom{map[string]*Room{}}
 }
 
-// 当已经存在房间了放回false
+// 当已经存在房间了返回false
 // todo 冲突，还是重复了？
 func (chatRoom *ChatRoom) AddRoom(uuid string, createRoomArg *CreateRoomReq) bool {
 	if chatRoom.Rooms[uuid] != nil {

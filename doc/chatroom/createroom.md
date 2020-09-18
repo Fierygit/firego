@@ -34,7 +34,4 @@
 
 - error
 - msg
-- code
 
-1、 
-2、

@@ -22,7 +22,7 @@ func Run() {
 	v1 := router.Group("/v1")
 	v1.GET("/", Index)
 	v1.POST("/room", CreateRoom)
-	v1.GET("/room/:id", EnterRoom)
+	v1.POST("/enterroom", EnterRoom)
 	v1.POST("/message", CreateMessage)
 	v1.GET("/message", GetMessage)
 

@@ -34,8 +34,8 @@ func CreateRoom(ctx *gin.Context) {
 	}
 	uuid := createRoom(req)
 	redirectURL := fmt.Sprintf("http://127.0.0.1:666/v1/room/%s", uuid)
-	//ctx.JSON(http.StatusOK, gin.H{"url":redirectURL})
-	ctx.Redirect(http.StatusFound, redirectURL)
+	ctx.JSON(http.StatusOK, gin.H{"url":redirectURL})
+	//ctx.Redirect(http.StatusFound, redirectURL)
 }
 
 func createRoom(req *CreateRoomReq) string {

@@ -13,8 +13,8 @@ const addr = ":8888"
 
 // Run 启动websocket服务
 func Run() {
-	hub := newHub()
-	go hub.run()
+	hub := NewHub()
+	go hub.Run()
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serveWs(hub, w, r)
 	})

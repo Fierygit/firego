@@ -6,11 +6,10 @@ package websocket
 
 import (
 	"bytes"
+	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/gorilla/websocket"
 )
 
 const (
@@ -74,6 +73,7 @@ func (c *Client) readPump() {
 			break
 		}
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
+		log.Println(message)
 		c.hub.broadcast <- message
 	}
 }

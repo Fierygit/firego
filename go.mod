@@ -7,6 +7,8 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/websocket v1.4.2
 	github.com/sirupsen/logrus v1.6.0
+	github.com/spf13/viper v1.7.1
 	github.com/syndtr/goleveldb v1.0.0
+	golang.org/x/text v0.3.2
 	gopkg.in/yaml.v2 v2.3.0
 )

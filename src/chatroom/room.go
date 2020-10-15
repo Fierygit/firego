@@ -1,6 +1,11 @@
 package chatroom
 
-import "time"
+import (
+	// log "github.com/sirupsen/logrus"
+	// "net/http"
+	"time"
+	// ws "firego/src/websocket"
+)
 
 type Client struct {
 	IP            string // 用户的ip
@@ -86,8 +91,8 @@ func InitChatRoom() *ChatRoom {
 
 // 当已经存在房间了返回false
 // todo 冲突，还是重复了？
-func (chatRoom *ChatRoom) AddRoom(uuid string, createRoomArg *CreateRoomReq) bool {
-	if chatRoom.Rooms[uuid] != nil {
+func (this *ChatRoom) AddRoom(uuid string, createRoomArg *CreateRoomReq) bool {
+	if this.Rooms[uuid] != nil {
 		return false
 	}
 	room := Room{
@@ -97,18 +102,29 @@ func (chatRoom *ChatRoom) AddRoom(uuid string, createRoomArg *CreateRoomReq) boo
 		ClientNum: 0,
 		Messages:  []*Message{},
 		Clients:   map[string]*Client{}}
-	chatRoom.Rooms[uuid] = &room
+	this.Rooms[uuid] = &room
+
+	// hub := ws.NewHub()
+	// go hub.Run()
+	// http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+	// 	serveWs(hub, w, r)
+	// })
+	// err := http.ListenAndServe(addr, nil)
+	// if err != nil {
+	// 	log.Fatal("ListenAndServe: ", err)
+	// }
+
 	return true
 }
 
-func (chatRoom *ChatRoom) GetRoom(uuid string) *Room {
-	return chatRoom.Rooms[uuid]
+func (this *ChatRoom) GetRoom(uuid string) *Room {
+	return this.Rooms[uuid]
 }
 
-func (chatRoom *ChatRoom) RemoveRoom(uuid string) {
-	chatRoom.Rooms[uuid] = nil
+func (this *ChatRoom) RemoveRoom(uuid string) {
+	this.Rooms[uuid] = nil
 }
 
-func (chatRoom *ChatRoom) RoomNum() int {
-	return len(chatRoom.Rooms)
+func (this *ChatRoom) RoomNum() int {
+	return len(this.Rooms)
 }

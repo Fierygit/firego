@@ -1,16 +1,27 @@
+/*
+ * @Author: Firefly
+ * @Date: 2020-09-14 19:08:16
+ * @Descripttion:
+ * @LastEditTime: 2020-10-15 22:34:27
+ */
 package chatroom
 
 import (
-	_ "firego/src/log" // 初始化logrus
+	_ "firego/src/common/log" // 初始化logrus
+
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
+
+var rooms *ChatRoom
 
 // Run 启动http服务器
 func Run() {
 	logrus.Info("start to run server!!!")
 	// gin.SetMode(gin.ReleaseMode)
 	gin.SetMode(gin.DebugMode)
+
+	rooms = InitChatRoom()
 
 	router := gin.Default()
 

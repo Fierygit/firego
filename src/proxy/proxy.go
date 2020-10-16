@@ -2,13 +2,13 @@
  * @Author: Firefly
  * @Date: 2020-10-15 14:45:14
  * @Descripttion:
- * @LastEditTime: 2020-10-15 22:37:45
+ * @LastEditTime: 2020-10-16 12:07:32
  */
 
 package proxy
 
 import (
-	"firego/src/common"
+	"firego/src/common/util"
 	"flag"
 	"io"
 	"log"
@@ -47,7 +47,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	for k, v := range proxyConfig {
 		i := 0
-		for ; i < common.Min(len(k), len(r.URL.Path)); i++ {
+		for ; i < util.Min(len(k), len(r.URL.Path)); i++ {
 			if k[i] != r.URL.Path[i] {
 				break
 			}
@@ -66,7 +66,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		truePort = proxyConfig["default"]
 	}
 
-	url, err := url.Parse(prifix + truePort + r.URL.Path)
+	url, err := url.Parse(prifix + truePort)
 	if err != nil {
 		io.WriteString(w, url.Path+"error\n")
 		log.Println(err)

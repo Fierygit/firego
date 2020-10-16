@@ -1,19 +1,23 @@
+package ddl
+
 /*
  * @Author: Firefly
  * @Date: 2020-10-15 22:41:28
  * @Descripttion:
- * @LastEditTime: 2020-10-15 23:20:55
+ * @LastEditTime: 2020-10-16 12:08:03
  */
-package main
 
 import (
+	mid "firego/src/common/middleware"
+	"firego/src/ddl/controller"
 	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
-func main() {
+//Run run
+func Run() {
 	initConfig()
 	r := gin.Default()
 	r = CollectRoute(r)
@@ -26,9 +30,9 @@ func main() {
 
 func initConfig() {
 	workDir, _ := os.Getwd()
-	viper.SetConfigName("ddl")
+	viper.SetConfigName("config")
 	viper.SetConfigType("yml")
-	viper.AddConfigPath(workDir + "/config")
+	viper.AddConfigPath(workDir + "/ddl/config")
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(err)
@@ -37,7 +41,7 @@ func initConfig() {
 
 //CollectRoute router
 func CollectRoute(r *gin.Engine) *gin.Engine {
-	r.Use(middleware.CORSMiddleware(), middleware.RecoveryMiddleware())
-	r.POST("/api/hello", controller.Hello)
+	r.Use(mid.CORSMiddleware(), mid.RecoveryMiddleware())
+	r.POST("/ddl/api/hello", controller.Hello)
 	return r
 }

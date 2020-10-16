@@ -2,11 +2,13 @@
  * @Author: Firefly
  * @Date: 2020-10-16 10:28:36
  * @Descripttion:
- * @LastEditTime: 2020-10-16 12:04:19
+ * @LastEditTime: 2020-10-16 20:06:45
  */
 package main
 
 import (
+	"firego/src/common/db/client"
+	"firego/src/common/db/server"
 	"firego/src/common/log"
 	"firego/src/ddl"
 	"firego/src/proxy"
@@ -25,21 +27,19 @@ func main() {
 	}
 
 	switch os.Args[1] {
-	case "proxy":
+	case "proxy", "-p":
 		proxy.Run()
-	case "-p":
-		proxy.Run()
-		break
-	case "ddl":
+	case "ddl", "-d":
 		ddl.Run()
-	case "-d":
-		ddl.Run()
-		break
+	case "leveldb", "-l":
+		server.Run()
+	case "testdb":
+		client.TestClient()
 	default:
 		usage := fmt.Sprintf("\nfirego backend by mingor & firefly\n\n")
 		usage += fmt.Sprintf("Usage:\n\n\tgo run main.go [arguments]\n\n")
 		usage += fmt.Sprintf("The commands are:\n\n")
-		usage += fmt.Sprintf("\t-p\tproxy\n\t-d\tddl")
+		usage += fmt.Sprintf("\t-p\tproxy\n\t-d\tddl\n\t-l\tleveldb")
 
 		usage += fmt.Sprintf("\n\n")
 		logrus.Info(usage)

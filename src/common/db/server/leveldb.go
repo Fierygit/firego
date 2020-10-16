@@ -1,6 +1,10 @@
-// https://github.com/syndtr/goleveldb
-
-package db
+/*
+ * @Author: Firefly
+ * @Date: 2020-10-16 15:24:48
+ * @Descripttion:
+ * @LastEditTime: 2020-10-16 21:43:28
+ */
+package server
 
 import (
 	"os"
@@ -10,10 +14,11 @@ import (
 	"github.com/syndtr/goleveldb/leveldb/util"
 )
 
-func init() {
+//InitDB s
+func InitDB() {
 	logrus.Info("init databse...")
 	// InitDataBase 初始化数据库
-	db, err := leveldb.OpenFile("./data", nil)
+	db, err := leveldb.OpenFile("../data", nil)
 	if err != nil {
 		os.Exit(1)
 	}
@@ -39,7 +44,6 @@ func GetInstance() *DataBase {
 // GetByKey get value by key
 func (p *DataBase) GetByKey(key string, value *string) error {
 	data, err := p.db.Get([]byte(key), nil)
-
 	*value = string(data)
 	return err
 }
@@ -56,6 +60,5 @@ func (p *DataBase) BatchGetByPrefix(prefix string, values []interface{}) {
 // PutByKey 存放数据
 func (p *DataBase) PutByKey(key string, value string) error {
 	err := p.db.Put([]byte(key), []byte(value), nil)
-
 	return err
 }

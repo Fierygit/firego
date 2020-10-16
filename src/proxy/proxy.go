@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-10-15 14:45:14
  * @Descripttion:
- * @LastEditTime: 2020-10-16 12:07:32
+ * @LastEditTime: 2020-10-16 12:20:10
  */
 
 package proxy
@@ -39,6 +39,7 @@ func initConfig() {
 	}
 }
 
+// 可以在代理进行权限检查，app 也检查，双重检查
 func handler(w http.ResponseWriter, r *http.Request) {
 
 	logrus.Info("proxy for " + r.URL.Path)

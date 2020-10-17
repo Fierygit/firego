@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-10-15 14:45:14
  * @Descripttion:
- * @LastEditTime: 2020-10-16 12:20:10
+ * @LastEditTime: 2020-10-17 16:03:30
  */
 
 package proxy
@@ -24,6 +24,8 @@ import (
 
 var proxyConfig = make(map[string]string)
 
+var signInfo = ""
+
 func initConfig() {
 	workDir, _ := os.Getwd()
 	viper.SetConfigName("config")
@@ -36,6 +38,7 @@ func initConfig() {
 	}
 	for k, v := range viper.AllSettings() {
 		proxyConfig[k] = strconv.Itoa(v.(int))
+		signInfo += string("\n" + k + " ---> " + v.(string) + "\n")
 	}
 }
 
@@ -61,7 +64,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	if truePort == "" {
 		if proxyConfig["default"] == "" {
-			io.WriteString(w, "error\n")
+			io.WriteString(w, signInfo)
 			return
 		}
 		truePort = proxyConfig["default"]
@@ -69,7 +72,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	url, err := url.Parse(prifix + truePort)
 	if err != nil {
-		io.WriteString(w, url.Path+"error\n")
+		io.WriteString(w, url.Path+signInfo)
 		log.Println(err)
 		return
 	}

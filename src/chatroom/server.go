@@ -26,7 +26,7 @@ func Run() {
 	v1.POST("/message", CreateMessage)
 	v1.GET("/message", GetMessage)
 
-	router.Run(":666")
+	router.Run(":80")
 
 	logrus.Info("should not run here now") // 暂时不用协成， 之后改成异步的
 }

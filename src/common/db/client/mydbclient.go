@@ -74,7 +74,7 @@ func (db *Leveldb) Get(key interface{}) interface{} {
 	// todo 自定义序列化
 	keyTmp := key.(string)
 	valueTmp := string("")
-	return *db.call(&keyTmp, &valueTmp)
+	return *(db.call(&keyTmp, &valueTmp, "get")).(*string)
 }
 
 //Put put
@@ -82,18 +82,45 @@ func (db *Leveldb) Put(key interface{}, value interface{}) {
 	//todo 自定义序列化
 	keyTmp := key.(string)
 	valueTmp := value.(string)
-	db.call(&keyTmp, &valueTmp)
+	db.call(&keyTmp, &valueTmp, "put")
+}
+
+//Has put
+func (db *Leveldb) Has(key interface{}) bool {
+	//todo 自定义序列化
+	keyTmp := key.(string)
+	valueTmp := string("")
+	return db.call(&keyTmp, &valueTmp, "has").(bool)
+}
+
+//Delete put
+func (db *Leveldb) Delete(key interface{}, value interface{}) {
+	//todo 自定义序列化
+	keyTmp := key.(string)
+	valueTmp := value.(string)
+	db.call(&keyTmp, &valueTmp, "del")
 }
 
 //Put0 put
-func (db *Leveldb) call(key *string, value *string) *string {
+func (db *Leveldb) call(key *string, value *string, opt string) interface{} {
 	rep := ""
 	pairTmp := model.NewPair(db.name+*key, *value)
 	var rst error
-	if *value == "" {
+	switch opt {
+	case "del":
+		rst = db.con.GetCon().Call("RPCMethods.Delete", model.NewReq(&db.name, &db.password, pairTmp), &rep)
+	case "get":
 		rst = db.con.GetCon().Call("RPCMethods.Get", model.NewReq(&db.name, &db.password, pairTmp), &rep)
-	} else {
+	case "put":
 		rst = db.con.GetCon().Call("RPCMethods.Put", model.NewReq(&db.name, &db.password, pairTmp), &rep)
+	case "has":
+		var reply bool
+		rst = db.con.GetCon().Call("RPCMethods.Has", model.NewReq(&db.name, &db.password, pairTmp), &reply)
+		if rst != nil {
+			//todo 连接错误处理
+			panic("con error")
+		}
+		return reply
 	}
 	if rst != nil {
 		//todo 连接错误处理
@@ -102,7 +129,14 @@ func (db *Leveldb) call(key *string, value *string) *string {
 	return &rep
 }
 
+//Get1 put
+func (db *Leveldb) Get1(key1 interface{}, key2 interface{}) {
+	keyTmp := key1.(string) + key2.(string)
+	db.Get(keyTmp)
+}
+
 //Put1 put
 func (db *Leveldb) Put1(key1 interface{}, key2 interface{}, value interface{}) {
-
+	keyTmp := key1.(string) + key2.(string)
+	db.Put(keyTmp, value)
 }

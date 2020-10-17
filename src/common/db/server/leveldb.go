@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-10-16 15:24:48
  * @Descripttion:
- * @LastEditTime: 2020-10-16 21:43:28
+ * @LastEditTime: 2020-10-17 15:51:20
  */
 package server
 
@@ -61,4 +61,16 @@ func (p *DataBase) BatchGetByPrefix(prefix string, values []interface{}) {
 func (p *DataBase) PutByKey(key string, value string) error {
 	err := p.db.Put([]byte(key), []byte(value), nil)
 	return err
+}
+
+// Has d
+func (p *DataBase) Has(key string, value *bool) error {
+	data, err := p.db.Has([]byte(key), nil)
+	*value = data
+	return err
+}
+
+// Delete d
+func (p *DataBase) Delete(key string) error {
+	return p.db.Delete([]byte(key), nil)
 }

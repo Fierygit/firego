@@ -1,11 +1,3 @@
-###
- # @Author: Firefly
- # @Date: 2020-10-12 16:15:38
- # @Descripttion: 
- # @LastEditTime: 2020-10-16 12:14:00
-### 
-
-# 接受所有参数作为 commit 的描述
 
 info=$*
 if [ ! $info ]; then 

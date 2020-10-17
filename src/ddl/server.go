@@ -4,12 +4,10 @@ package ddl
  * @Author: Firefly
  * @Date: 2020-10-15 22:41:28
  * @Descripttion:
- * @LastEditTime: 2020-10-16 12:08:03
+ * @LastEditTime: 2020-10-16 23:15:49
  */
 
 import (
-	mid "firego/src/common/middleware"
-	"firego/src/ddl/controller"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -39,9 +37,4 @@ func initConfig() {
 	}
 }
 
-//CollectRoute router
-func CollectRoute(r *gin.Engine) *gin.Engine {
-	r.Use(mid.CORSMiddleware(), mid.RecoveryMiddleware())
-	r.POST("/ddl/api/hello", controller.Hello)
-	return r
-}
+

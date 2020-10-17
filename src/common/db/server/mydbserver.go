@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-10-16 19:20:39
  * @Descripttion:
- * @LastEditTime: 2020-10-16 21:41:53
+ * @LastEditTime: 2020-10-17 15:51:08
  */
 package server
 
@@ -26,9 +26,9 @@ func Run() {
 //RPCMethods proxy
 type RPCMethods int
 
+//Get g
 func (*RPCMethods) Get(req *model.Req, reply *string) error {
-	logrus.Info(req)
-
+	logrus.Info("Get ", req)
 	err := GetInstance().GetByKey(req.Pair.Key, reply)
 	if err != nil {
 		logrus.Warn(err)
@@ -36,9 +36,30 @@ func (*RPCMethods) Get(req *model.Req, reply *string) error {
 	return nil
 }
 
+//Put p
 func (*RPCMethods) Put(req *model.Req, reply *string) error {
-	logrus.Info(req)
+	logrus.Info("Put ", req)
 	err := GetInstance().PutByKey(req.Pair.Key, req.Pair.Value)
+	if err != nil {
+		logrus.Warn(err)
+	}
+	return nil
+}
+
+//Has p
+func (*RPCMethods) Has(req *model.Req, reply *bool) error {
+	logrus.Info("Has ", req)
+	err := GetInstance().Has(req.Pair.Key, reply)
+	if err != nil {
+		logrus.Warn(err)
+	}
+	return nil
+}
+
+//Delete p
+func (*RPCMethods) Delete(req *model.Req, reply *string) error {
+	logrus.Info("delete  ", req)
+	err := GetInstance().Delete(req.Pair.Key)
 	if err != nil {
 		logrus.Warn(err)
 	}

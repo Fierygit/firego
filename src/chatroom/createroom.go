@@ -33,18 +33,23 @@ func CreateRoom(ctx *gin.Context) {
 		return
 	}
 	uuid := createRoom(req)
-	redirectURL := fmt.Sprintf("http://127.0.0.1:666/v1/room/%s", uuid)
-	ctx.JSON(http.StatusOK, gin.H{"url":redirectURL})
-	//ctx.Redirect(http.StatusFound, redirectURL)
+	if uuid == "" {
+		ctx.JSON(http.StatusAlreadyReported, gin.H{"url": ""})
+	} else {
+		redirectURL := fmt.Sprintf("http://127.0.0.1:666/v1/room/%s", uuid)
+		ctx.JSON(http.StatusOK, gin.H{"url": redirectURL})
+		//ctx.Redirect(http.StatusFound, redirectURL)
+	}
 }
 
 func createRoom(req *CreateRoomReq) string {
-	id := uuid.New()
+	id := uuid.New().String()
 	// TODO used as session
-	// save to db
-	logrus.Info("create a new room ", id.String())
-
-	return id.String()
+	logrus.Info("create a new room ", id)
+	if !rooms.AddRoom(id, req) {
+		return ""
+	}
+	return id
 }
 
 func checkReq(req *CreateRoomReq) error {

@@ -8,7 +8,7 @@ import (
 
 type EnterRoomReq struct {
 	RoomId   string `form:"roomId" binding:"required"`
-	Password   string `form:"password" `
+	Password string `form:"password" `
 	OtherMsg string `form:"other" `
 }
 
@@ -20,8 +20,16 @@ func EnterRoom(ctx *gin.Context) {
 	logrus.Info(req)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"msg": http.StatusText(http.StatusBadRequest)})
+		return
 	}
 
+	room := rooms.GetRoom(req.RoomId)
+	isOpen := room.RoomInfo.CreateInfo.IsOpen
+	Password := room.RoomInfo.CreateInfo.Password
+	if isOpen == 0 && req.Password != Password {
+		ctx.JSON(http.StatusOK, gin.H{"msg": "password error"})
+		return
+	}
 
-	ctx.JSON(http.StatusOK, gin.H{"info":"test"})
+	ctx.JSON(http.StatusOK, gin.H{"msg": room})
 }

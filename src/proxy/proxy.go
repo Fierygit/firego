@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-10-15 14:45:14
  * @Descripttion:
- * @LastEditTime: 2020-10-17 16:03:30
+ * @LastEditTime: 2020-10-17 16:13:07
  */
 
 package proxy
@@ -38,7 +38,7 @@ func initConfig() {
 	}
 	for k, v := range viper.AllSettings() {
 		proxyConfig[k] = strconv.Itoa(v.(int))
-		signInfo += string("\n" + k + " ---> " + v.(string) + "\n")
+		signInfo += string("\n" + k + " ---> " +  strconv.Itoa(v.(int)) + "\n")
 	}
 }
 

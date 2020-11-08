@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-11-07 17:29:09
  * @Descripttion: 
- * @LastEditTime: 2020-11-08 11:18:52
+ * @LastEditTime: 2020-11-08 14:03:49
  */
 // 霸都丶傲天 2019年10月10日 https://github.com/AJLoveChina/birthday
 var config = {
@@ -12,13 +12,15 @@ var config = {
         "我想给贝贝最好的祝福",
         "无奈写不出太多华丽句子",
         "绞尽脑汁，到底如何才能让贝贝开心呢？",
-        "翻遍歌单，寻找很多动人的旋律",
-        "原来每一句都是想和贝贝说的祝福",
+        "翻遍歌单，寻找了很多动人的旋律",
+        "才发现想和贝贝说的祝福原来如此之多",
         "送给我",      
-        "心爱的贝贝",  
+        "心爱的贝贝",
         "愿你的身后总有力量",
         "愿你成为自己的太阳",
         "愿你永驻时光爱上彼此的模样",
+        "愿你开开心心每一天!!!",  
+        "......"
         
         
     ],
@@ -42,7 +44,7 @@ var config = {
         bannar_coming: "go",
         balloons_flying: "好像少点东西",
         cake_fadein: "蛋糕",
-        light_candle: "点火",
+        light_candle: "fire",
         wish_message: "生日快乐",
         story: "A MESSAGE FOR beibei",
     }

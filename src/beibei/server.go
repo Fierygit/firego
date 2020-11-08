@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-09-14 19:08:16
  * @Descripttion:
- * @LastEditTime: 2020-11-07 21:24:58
+ * @LastEditTime: 2020-11-08 13:46:04
  */
 package beibei
 
@@ -24,8 +24,7 @@ func Run() {
 	router := gin.Default()
 
 	fmt.Println(os.Getwd())
-
-	// 加载静态资源
+	router.NoRoute(PageNotfound())
 	router.Static("/beibei/2020", "beibei/frontend/birthday2020")
 	router.Static("/beibei/lovetree", "beibei/frontend/lovetree")
 

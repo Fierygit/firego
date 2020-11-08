@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-11-08 14:51:57
  * @Descripttion:
- * @LastEditTime: 2020-11-08 15:18:06
+ * @LastEditTime: 2020-11-08 15:22:19
  */
 package beibei
 
@@ -18,7 +18,7 @@ import (
 
 //GetTest v
 func GetTest(ctx *gin.Context) {
-	b, err1 := ioutil.ReadFile("beibei/data/dealed.json")
+	b, err1 := ioutil.ReadFile("beibei/weibodata/dealed.json")
 	if err1 != nil {
 		fmt.Println("read fail", err1)
 	}

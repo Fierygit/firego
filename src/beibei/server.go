@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-09-14 19:08:16
  * @Descripttion:
- * @LastEditTime: 2020-11-08 13:46:04
+ * @LastEditTime: 2020-11-08 14:40:32
  */
 package beibei
 
@@ -26,7 +26,7 @@ func Run() {
 	fmt.Println(os.Getwd())
 	router.NoRoute(PageNotfound())
 	router.Static("/beibei/2020", "beibei/frontend/birthday2020")
-	router.Static("/beibei/lovetree", "beibei/frontend/lovetree")
+	router.Static("/beibei/love", "beibei/frontend/lovetree")
 
 	router.Run(":2222")
 

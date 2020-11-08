@@ -2,11 +2,12 @@
  * @Author: Firefly
  * @Date: 2020-10-16 10:28:36
  * @Descripttion:
- * @LastEditTime: 2020-10-16 20:06:45
+ * @LastEditTime: 2020-11-07 17:05:45
  */
 package main
 
 import (
+	"firego/src/beibei"
 	"firego/src/common/db/client"
 	"firego/src/common/db/server"
 	"firego/src/common/log"
@@ -35,6 +36,8 @@ func main() {
 		server.Run()
 	case "testdb":
 		client.TestClient()
+	case "beibei":
+		beibei.Run()
 	default:
 		usage := fmt.Sprintf("\nfirego backend by mingor & firefly\n\n")
 		usage += fmt.Sprintf("Usage:\n\n\tgo run main.go [arguments]\n\n")

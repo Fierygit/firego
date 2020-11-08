@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-10-16 22:45:37
  * @Descripttion:
- * @LastEditTime: 2020-10-17 15:53:19
+ * @LastEditTime: 2020-10-17 23:04:10
  */
 package controller
 
@@ -33,6 +33,10 @@ func NewDdlController() IDdlController {
 	return DdlController{DB: db}
 }
 
+
+func (controller DdlController)GetImg(ctx *gin.Context) {
+
+}
 //AddUser c
 func (controller DdlController) AddUser(ctx *gin.Context) {
 

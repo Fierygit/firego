@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-10-16 10:28:36
  * @Descripttion:
- * @LastEditTime: 2020-11-07 17:05:45
+ * @LastEditTime: 2020-11-13 15:14:46
  */
 package main
 
@@ -11,7 +11,7 @@ import (
 	"firego/src/common/db/client"
 	"firego/src/common/db/server"
 	"firego/src/common/log"
-	"firego/src/ddl"
+	"firego/src/home"
 	"firego/src/proxy"
 	"fmt"
 	"os"
@@ -30,8 +30,8 @@ func main() {
 	switch os.Args[1] {
 	case "proxy", "-p":
 		proxy.Run()
-	case "ddl", "-d":
-		ddl.Run()
+	case "home", "-h":
+		home.Run()
 	case "leveldb", "-l":
 		server.Run()
 	case "testdb":

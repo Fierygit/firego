@@ -46,7 +46,7 @@
         },
         methods: {
             handleSelect(key, keyPath) {
-                console.log(key, keyPath);
+                console.log(key, keyPath, this.activeIndex);
                 this.move2page(key, 0)
             },
             move2page(index, direction) {

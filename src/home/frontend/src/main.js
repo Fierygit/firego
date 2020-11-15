@@ -5,7 +5,14 @@ import  './plugins/element.js'
 
 Vue.config.productionTip = false
 
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 
+// router.js
+router.beforeEach((to, from, next) => {
+  document.title = "Firego";
+  next()
+})
 
 new Vue({
   router,

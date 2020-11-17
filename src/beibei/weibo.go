@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-11-08 14:51:57
  * @Descripttion:
- * @LastEditTime: 2020-11-08 15:22:19
+ * @LastEditTime: 2020-11-17 09:26:44
  */
 package beibei
 
@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"reflect"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -37,4 +38,29 @@ func GetTest(ctx *gin.Context) {
 	test := m.(map[string]interface{})
 	response.Success(ctx, test, "success")
 
+}
+
+//GetWordSetData f
+func GetWordSetData(ctx *gin.Context) {
+	ret := make(gin.H)
+	ret["data"] = GetWordSet()
+	response.Success(ctx, ret, "success")
+}
+
+//SearchData v
+func SearchData(ctx *gin.Context) {
+	data := ctx.Query("data")
+	if data == "" {
+		response.Error(ctx, "wrong", nil)
+		return
+	}
+
+	fmt.Println(data)
+	ans, datalist := SearchDataCos(data)
+	ret := make(gin.H)
+	for k, v := range ans {
+		datalist[k]["grade"] = v
+		ret[strconv.Itoa(k)] = datalist[k]
+	}
+	response.Success(ctx, ret, "success")
 }

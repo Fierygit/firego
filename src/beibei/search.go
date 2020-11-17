@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-11-16 22:50:55
  * @Descripttion:
- * @LastEditTime: 2020-11-16 23:16:21
+ * @LastEditTime: 2020-11-17 09:23:34
  */
 package beibei
 
@@ -117,6 +117,15 @@ func dealData() {
 }
 
 var initData bool = false
+
+//GetWordSet
+func GetWordSet() map[string]int {
+	if !initData {
+		dealData()
+		initData = true
+	}
+	return wordSet
+}
 
 //SearchDataCos s
 func SearchDataCos(inputData string) (map[int]float64, []map[string]interface{}) {

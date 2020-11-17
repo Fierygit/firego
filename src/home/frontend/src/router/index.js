@@ -31,6 +31,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
     },
     {
+        path: '/data',
+        name: 'data',
+        component: ()=>import('../views/Data.vue')
+    },
+    {
         path: '*',
         redirect: "/about"
 

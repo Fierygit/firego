@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-11-08 14:51:57
  * @Descripttion:
- * @LastEditTime: 2020-11-16 23:25:55
+ * @LastEditTime: 2020-11-17 09:26:44
  */
 package beibei
 
@@ -40,12 +40,19 @@ func GetTest(ctx *gin.Context) {
 
 }
 
+//GetWordSetData f
+func GetWordSetData(ctx *gin.Context) {
+	ret := make(gin.H)
+	ret["data"] = GetWordSet()
+	response.Success(ctx, ret, "success")
+}
+
 //SearchData v
 func SearchData(ctx *gin.Context) {
 	data := ctx.Query("data")
 	if data == "" {
 		response.Error(ctx, "wrong", nil)
-
+		return
 	}
 
 	fmt.Println(data)

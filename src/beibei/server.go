@@ -2,15 +2,17 @@
  * @Author: Firefly
  * @Date: 2020-09-14 19:08:16
  * @Descripttion:
- * @LastEditTime: 2020-11-17 11:04:04
+ * @LastEditTime: 2020-11-18 13:26:11
  */
 package beibei
 
 import (
 	_ "firego/src/common/log" // 初始化logrus
-	"os"
-	"fmt"
 	mid "firego/src/common/middleware"
+	"firego/src/common/response"
+	"fmt"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
@@ -26,7 +28,11 @@ func Run() {
 	fmt.Println(os.Getwd())
 	router.Use(mid.CORSMiddleware())
 	router.NoRoute(PageNotfound())
-	router.Static("/beibei/2020", "beibei/frontend/birthday2020")
+	router.Static("/beibei/api/2020", "beibei/frontend/birthday2020")
+	router.GET("/beibei/2020", func(c *gin.Context) {
+		response.Error(c, "活动已过期 -_-", nil)
+
+	})
 	router.Static("/beibei/love", "beibei/frontend/lovetree")
 	router.GET("/beibei/api/data", GetTest)
 	router.GET("/beibei/api/search", SearchData)

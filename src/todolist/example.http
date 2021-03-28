@@ -2,7 +2,7 @@ POST http://127.0.0.1:8716/todo HTTP/1.1
 content-type: application/json
 
 {
-    "todo": "test"
+    "todo": "test2"
 }
 
 ###
@@ -13,11 +13,11 @@ content-type: application/json
 }
 
 ###
-DELETE http://127.0.0.1:8716/todo HTTP/1.1
+POST  http://127.0.0.1:8716/todo/delete HTTP/1.1
 content-type: application/json
 
 {
-    "id": "1376197979001589760"
+    "id": "1376220843574562816"
 }
 
 ###
@@ -25,6 +25,6 @@ POST  http://127.0.0.1:8716/todo/finish HTTP/1.1
 content-type: application/json
 
 {
-    "id": "1376199394025541632",
+    "id": "1376215328933023744",
     "finished": true
 }

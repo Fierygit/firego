@@ -35,11 +35,12 @@ func (ctl *TodoController) AddTodo(c *gin.Context) {
 	}
 
 	id := util.GetSnowflake().String()
-	data, err := json.Marshal(&TodoModel{
+	todo := TodoModel{
 		Id:       id,
 		Name:     req.Todo,
 		Finished: false,
-	})
+	}
+	data, err := json.Marshal(todo)
 	if err != nil {
 		logrus.Error("json.marshal failed, err:", err)
 		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
@@ -53,7 +54,7 @@ func (ctl *TodoController) AddTodo(c *gin.Context) {
 
 	ctl.DB.Put(user_id, key, value)
 
-	c.JSON(http.StatusOK, value)
+	c.JSON(http.StatusOK, todo)
 }
 
 func (ctl *TodoController) GetTodo(c *gin.Context) {
@@ -72,14 +73,14 @@ func (ctl *TodoController) GetTodo(c *gin.Context) {
 		todo_list = append(todo_list, todo)
 	}
 
-	data, err := json.Marshal(todo_list)
-	if err != nil {
-		logrus.Error("json.marshal failed, err:", err)
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
-		return
-	}
+	// data, err := json.Marshal(todo_list)
+	// if err != nil {
+	// 	logrus.Error("json.marshal failed, err:", err)
+	// 	c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+	// 	return
+	// }
 
-	c.JSON(http.StatusOK, string(data))
+	c.JSON(http.StatusOK, todo_list)
 }
 
 func (ctl *TodoController) RemoveTodo(c *gin.Context) {
@@ -139,5 +140,5 @@ func (ctl *TodoController) FinishTodo(c *gin.Context) {
 
 	ctl.DB.Put(user_id, req.Id, string(data))
 
-	c.JSON(http.StatusOK, string(data))
+	c.JSON(http.StatusOK, todo)
 }

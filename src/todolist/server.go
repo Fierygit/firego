@@ -18,7 +18,7 @@ func Run() {
 	r.Use(mid.CORSMiddleware())
 	r.GET("/todo", todo_controller.GetTodo)
 	r.POST("/todo", todo_controller.AddTodo)
-	r.DELETE("/todo", todo_controller.RemoveTodo)
+	r.POST("/todo/delete", todo_controller.RemoveTodo)
 	r.POST("/todo/finish", todo_controller.FinishTodo)
 
 	port := viper.GetString("server.port")

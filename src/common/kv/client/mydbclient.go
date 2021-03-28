@@ -69,48 +69,66 @@ func (con *Connector) GetCon() *rpc.Client {
 // ----------------------Leveldb--------------------------------
 
 //Get g
-func (db *Leveldb) Get(key interface{}) interface{} {
+func (db *Leveldb) Get(id, key string) string {
 	// 1、类型检查， 只有string！！！
 	// todo 自定义序列化
-	keyTmp := key.(string)
-	valueTmp := string("")
-	return *(db.call(&keyTmp, &valueTmp, "get")).(*string)
+	tmpKey := ComposeKey(db.name, id, key)
+	valueTmp := ""
+	return *(db.call(&tmpKey, &valueTmp, "get")).(*string)
+}
+
+//BatchGet b
+func (db *Leveldb) BatchGet(id string) []string {
+	// 1、类型检查， 只有string！！！
+	// todo 自定义序列化
+	tmpKey := PrefixKey(db.name, id)
+	valueTmp := ""
+	return (db.call(&tmpKey, &valueTmp, "batchget")).([]string)
 }
 
 //Put put
-func (db *Leveldb) Put(key interface{}, value interface{}) {
+func (db *Leveldb) Put(id, key, value string) {
 	//todo 自定义序列化
-	keyTmp := key.(string)
-	valueTmp := value.(string)
-	db.call(&keyTmp, &valueTmp, "put")
+	tmpKey := ComposeKey(db.name, id, key)
+	valueTmp := value
+
+	db.call(&tmpKey, &valueTmp, "put")
 }
 
 //Has put
-func (db *Leveldb) Has(key interface{}) bool {
+func (db *Leveldb) Has(id, key string) bool {
 	//todo 自定义序列化
-	keyTmp := key.(string)
-	valueTmp := string("")
-	return db.call(&keyTmp, &valueTmp, "has").(bool)
+	tmpKey := ComposeKey(db.name, id, key)
+	tmpVal := ""
+	return db.call(&tmpKey, &tmpVal, "has").(bool)
 }
 
 //Delete put
-func (db *Leveldb) Delete(key interface{}, value interface{}) {
+func (db *Leveldb) Delete(id, key string) {
 	//todo 自定义序列化
-	keyTmp := key.(string)
-	valueTmp := value.(string)
-	db.call(&keyTmp, &valueTmp, "del")
+	tmpKey := ComposeKey(db.name, id, key)
+	tmpVal := ""
+	db.call(&tmpKey, &tmpVal, "del")
 }
 
 //Put0 put
 func (db *Leveldb) call(key *string, value *string, opt string) interface{} {
 	rep := ""
-	pairTmp := model.NewPair(db.name+*key, *value)
+	pairTmp := model.NewPair(*key, *value)
 	var rst error
 	switch opt {
 	case "del":
 		rst = db.con.GetCon().Call("RPCMethods.Delete", model.NewReq(&db.name, &db.password, pairTmp), &rep)
 	case "get":
 		rst = db.con.GetCon().Call("RPCMethods.Get", model.NewReq(&db.name, &db.password, pairTmp), &rep)
+	case "batchget":
+		var reply []string
+		rst = db.con.GetCon().Call("RPCMethods.BatchGet", model.NewReq(&db.name, &db.password, pairTmp), &reply)
+		if rst != nil {
+			//todo 连接错误处理
+			panic("con error")
+		}
+		return reply
 	case "put":
 		rst = db.con.GetCon().Call("RPCMethods.Put", model.NewReq(&db.name, &db.password, pairTmp), &rep)
 	case "has":
@@ -127,16 +145,4 @@ func (db *Leveldb) call(key *string, value *string, opt string) interface{} {
 		panic("con error")
 	}
 	return &rep
-}
-
-//Get1 put
-func (db *Leveldb) Get1(key1 interface{}, key2 interface{}) {
-	keyTmp := key1.(string) + key2.(string)
-	db.Get(keyTmp)
-}
-
-//Put1 put
-func (db *Leveldb) Put1(key1 interface{}, key2 interface{}, value interface{}) {
-	keyTmp := key1.(string) + key2.(string)
-	db.Put(keyTmp, value)
 }

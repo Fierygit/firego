@@ -7,6 +7,8 @@
 package client
 
 import (
+	"firego/src/common/util"
+	"strconv"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -15,12 +17,19 @@ import (
 //TestClient test
 func TestClient() {
 
-	leveldb := NewConnector().SetSize(2).Connect("firefly", "123456")
+	// user_id := util.GetSnowflake().Base36()
+	user_id := "agedbfqz9f5s"
+	leveldb := NewConnector().SetSize(2).Connect(PRE_TEST, "123456")
+
+	logrus.Info(user_id)
+
+	key := ""
 	for i := 0; i < 10; i++ {
-		leveldb.Put("test", "sdf")
+		key = util.GetSnowflake().String()
+		leveldb.Put(user_id, key, strconv.Itoa(i))
 	}
+
 	time.Sleep(time.Second * 3)
-	for i := 0; i < 10; i++ {
-		logrus.Info(leveldb.Get("test"))
-	}
+
+	logrus.Info(leveldb.BatchGet(user_id))
 }

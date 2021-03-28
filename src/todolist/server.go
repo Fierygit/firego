@@ -1,7 +1,7 @@
 package todolist
 
 import (
-	"net/http"
+	mid "firego/src/common/middleware"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -13,11 +13,13 @@ func Run() {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 
-	r.GET("/todo", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"hello": "world",
-		})
-	})
+	todo_controller := NewTodoController()
+
+	r.Use(mid.CORSMiddleware())
+	r.GET("/todo", todo_controller.GetTodo)
+	r.POST("/todo", todo_controller.AddTodo)
+	r.DELETE("/todo", todo_controller.RemoveTodo)
+	r.POST("/todo/finish", todo_controller.FinishTodo)
 
 	port := viper.GetString("server.port")
 	if port != "" {

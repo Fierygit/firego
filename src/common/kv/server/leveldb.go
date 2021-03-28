@@ -49,10 +49,10 @@ func (p *DataBase) GetByKey(key string, value *string) error {
 }
 
 // BatchGetByPrefix 通过前缀获取数据
-func (p *DataBase) BatchGetByPrefix(prefix string, values []interface{}) {
+func (p *DataBase) BatchGetByPrefix(prefix string, values *[]string) {
 	iter := p.db.NewIterator(util.BytesPrefix([]byte(prefix)), nil)
 	for iter.Next() {
-		values = append(values, iter.Value)
+		*values = append(*values, string(iter.Value()))
 	}
 	iter.Release()
 }

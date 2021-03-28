@@ -29,7 +29,7 @@ type DdlController struct {
 
 //NewDdlController A
 func NewDdlController() IDdlController {
-	db := client.NewConnector().SetSize(2).Connect("ddl", "123456")
+	db := client.NewConnector().SetSize(2).Connect(client.PRE_DDL, "123456")
 	return DdlController{DB: db}
 }
 

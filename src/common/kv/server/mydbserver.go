@@ -36,6 +36,13 @@ func (*RPCMethods) Get(req *model.Req, reply *string) error {
 	return nil
 }
 
+//BatchGet g
+func (*RPCMethods) BatchGet(req *model.Req, reply *[]string) error {
+	logrus.Info("BatchGet ", req)
+	GetInstance().BatchGetByPrefix(req.Pair.Key, reply)
+	return nil
+}
+
 //Put p
 func (*RPCMethods) Put(req *model.Req, reply *string) error {
 	logrus.Info("Put ", req)

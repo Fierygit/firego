@@ -9,6 +9,7 @@ package util
 import (
 	"os"
 
+	"github.com/bwmarrin/snowflake"
 	"github.com/sirupsen/logrus"
 )
 
@@ -26,4 +27,14 @@ func CheckError(err error) {
 		logrus.Info("Fatal error ", err.Error())
 		os.Exit(1)
 	}
+}
+
+func GetSnowflake() snowflake.ID {
+	node, err := snowflake.NewNode(1)
+	if err != nil {
+		logrus.Error("snowflake error ", err.Error())
+		os.Exit(1)
+	}
+
+	return node.Generate()
 }

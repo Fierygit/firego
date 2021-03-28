@@ -1,5 +1,7 @@
 .idea/
 *.exe
+*.txt
+*.out
 data/
 
 .vscode

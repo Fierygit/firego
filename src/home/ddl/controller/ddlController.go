@@ -7,9 +7,9 @@
 package controller
 
 import (
-	"firego/src/common/db/client"
+	"firego/src/common/kv/client"
 	"firego/src/common/response"
-	"firego/src/ddl/dto"
+	"firego/src/home/ddl/dto"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -33,10 +33,10 @@ func NewDdlController() IDdlController {
 	return DdlController{DB: db}
 }
 
-
-func (controller DdlController)GetImg(ctx *gin.Context) {
+func (controller DdlController) GetImg(ctx *gin.Context) {
 
 }
+
 //AddUser c
 func (controller DdlController) AddUser(ctx *gin.Context) {
 

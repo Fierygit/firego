@@ -1,7 +1,7 @@
 package client
 
 import (
-	"firego/src/common/db/model"
+	"firego/src/common/kv/model"
 	"math/rand"
 	"net/rpc"
 

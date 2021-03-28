@@ -1,9 +1,10 @@
 package chatroom
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"net/http"
 )
 
 type EnterRoomReq struct {

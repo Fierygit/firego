@@ -7,7 +7,7 @@
 package server
 
 import (
-	"firego/src/common/db/model"
+	"firego/src/common/kv/model"
 	"net"
 	"net/rpc"
 	"os"

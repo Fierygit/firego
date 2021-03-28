@@ -8,7 +8,7 @@ package ddl
 
 import (
 	mid "firego/src/common/middleware"
-	"firego/src/ddl/controller"
+	"firego/src/home/ddl/controller"
 
 	"github.com/gin-gonic/gin"
 )

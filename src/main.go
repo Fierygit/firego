@@ -8,24 +8,20 @@ package main
 
 import (
 	"firego/src/beibei"
-	"firego/src/common/db/client"
-	"firego/src/common/db/server"
-	"firego/src/common/log"
+	"firego/src/common/kv/client"
+	"firego/src/common/kv/server"
+	_ "firego/src/common/log"
 	"firego/src/home"
 	"firego/src/proxy"
+	"firego/src/todolist"
 	"fmt"
 	"os"
-	"strconv"
-
-	"github.com/sirupsen/logrus"
 )
 
 func main() {
-
-	log.Init()
-	for idx, args := range os.Args {
-		logrus.Info("init "+strconv.Itoa(idx)+" : ", args)
-	}
+	// for idx, args := range os.Args {
+	// 	logrus.Info("init "+strconv.Itoa(idx)+" : ", args)
+	// }
 
 	switch os.Args[1] {
 	case "proxy", "-p":
@@ -38,13 +34,20 @@ func main() {
 		client.TestClient()
 	case "beibei":
 		beibei.Run()
+	case "todolist":
+		todolist.Run()
 	default:
-		usage := fmt.Sprintf("\nfirego backend by mingor & firefly\n\n")
-		usage += fmt.Sprintf("Usage:\n\n\tgo run main.go [arguments]\n\n")
-		usage += fmt.Sprintf("The commands are:\n\n")
-		usage += fmt.Sprintf("\t-p\tproxy\n\t-d\tddl\n\t-l\tleveldb")
+		usage := `
+	firego backend by mingor & firefly
+	Usage:
+		go run main.go [arguments]
 
-		usage += fmt.Sprintf("\n\n")
-		logrus.Info(usage)
+	The commands are:
+	-p proxy
+	-d ddl
+	-l leveldb
+		`
+
+		fmt.Println(usage)
 	}
 }

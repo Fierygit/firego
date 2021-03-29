@@ -3,5 +3,6 @@
 *.txt
 *.out
 data/
+build/
 
 .vscode

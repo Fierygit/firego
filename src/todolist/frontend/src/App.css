@@ -1,0 +1,92 @@
+html {
+  font-size: 1.7vh;
+  font-family: Helvetica;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  min-height: 100vh;
+  background-color: #282c34;
+}
+
+.todolist {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: calc(10px + 2vmin);
+}
+
+.todolist h1 {
+  color: aliceblue;
+}
+
+.add-todo {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  margin-top: 5vh;
+}
+
+.add-todo-input {
+  font-size: 2rem;
+  min-width: 60vw;
+  border-radius: 10px;
+  height: 6vh;
+}
+
+.add-todo-btn {
+  border-radius: 10px;
+  height: 6vh;
+  width: 30%;
+  font-weight: bolder;
+  background-color: rgb(7, 255, 40);
+  font-size: 1.5rem;
+}
+
+.todo-name{
+  position: relative;
+  margin-left: 2vw;
+  font-weight: 700;
+}
+
+.todo-finish {
+  position: relative;
+  margin-left: 1vw;
+  transform: scale(2);
+}
+
+.todo {
+  position: relative;
+  color: black;
+  height: 6vh;
+  width: 90%;
+  font-size: 1.5rem;
+  background-color: rgb(223, 153, 62);
+  border: 2px solid rgba(255, 255, 255, 0.836);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.todo.line-through {
+  text-decoration-line: line-through;
+  text-decoration-thickness: 0.5rem;
+}
+
+.remove-todo-btn {
+  position: absolute;
+  right: 1vw;
+  font-size: 1.4rem;
+  background-color: rgb(243, 18, 18);
+  color: white;
+  border-radius: 5px;
+  height: 4vh;
+  width: 6rem;
+}

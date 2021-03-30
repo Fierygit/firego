@@ -19,13 +19,20 @@ func NewTodoController() TodoController {
 	return TodoController{DB: db}
 }
 
-// Todo: 目前只支持一个用户
-var user_id = "agedbfqz9f5s"
+func getUserId(c *gin.Context) string {
+	user_id := c.GetString("user_id")
+
+	logrus.Info(user_id)
+
+	return user_id
+}
 
 func (ctl *TodoController) AddTodo(c *gin.Context) {
 	type AddTodoReq struct {
 		Todo string `form:"todo" json:"todo" binding:"required"`
 	}
+	user_id := getUserId(c)
+
 	req := &AddTodoReq{}
 	err := c.BindJSON(&req)
 	if err != nil {
@@ -58,6 +65,7 @@ func (ctl *TodoController) AddTodo(c *gin.Context) {
 }
 
 func (ctl *TodoController) GetTodo(c *gin.Context) {
+	user_id := getUserId(c)
 	todos := ctl.DB.BatchGet(user_id)
 
 	todo_list := make([]TodoModel, 0)
@@ -87,6 +95,8 @@ func (ctl *TodoController) RemoveTodo(c *gin.Context) {
 	type RemoveTodoReq struct {
 		Id string `form:"id" json:"id" binding:"required"`
 	}
+	user_id := getUserId(c)
+
 	req := &RemoveTodoReq{}
 	err := c.BindJSON(&req)
 	if err != nil {
@@ -107,6 +117,8 @@ func (ctl *TodoController) FinishTodo(c *gin.Context) {
 		Id       string `form:"id" json:"id" binding:"required"`
 		Finished bool   `form:"finished" json:"finished" binding:"required"`
 	}
+	user_id := getUserId(c)
+
 	req := &FinishTodoReq{}
 	err := c.BindJSON(&req)
 	if err != nil {

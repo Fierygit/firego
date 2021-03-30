@@ -52,12 +52,12 @@ func (controller DdlController) AddUser(ctx *gin.Context) {
 	}
 
 	logrus.Info(ddlUser)
-	if controller.DB.Has(dto.UserPrifix + ddlUser.Name) {
-		response.Error(ctx, "用户已经存在", nil)
-	} else {
-		controller.DB.Put1(dto.UserPrifix, ddlUser.Name, "1")
-		response.Success(ctx, nil, "增加成功")
-	}
+	// if controller.DB.Has(dto.UserPrifix + ddlUser.Name) {
+	// 	response.Error(ctx, "用户已经存在", nil)
+	// } else {
+	// 	controller.DB.Put1(dto.UserPrifix, ddlUser.Name, "1")
+	// 	response.Success(ctx, nil, "增加成功")
+	// }
 
 }
 

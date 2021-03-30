@@ -28,3 +28,11 @@ content-type: application/json
     "id": "1376215328933023744",
     "finished": true
 }
+
+###
+POST  http://127.0.0.1:9527/user/login?redirect=http%3A%2F%2Flocalhost%3A8716%2Ftodo HTTP/1.1
+content-type: application/json
+
+{
+    "name": "mingor"
+}

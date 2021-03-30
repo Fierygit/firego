@@ -5,6 +5,7 @@ const (
 	PRE_TEST = "test_"
 	PRE_DDL  = "ddl_"
 	PRE_TODO = "todo_"
+	PRE_USER = "user_"
 )
 
 // PrefixKey

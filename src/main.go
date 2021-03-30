@@ -14,6 +14,7 @@ import (
 	"firego/src/home"
 	"firego/src/proxy"
 	"firego/src/todolist"
+	"firego/src/user"
 	"fmt"
 	"os"
 )
@@ -35,7 +36,9 @@ func main() {
 	case "beibei":
 		beibei.Run()
 	case "todolist":
-		todolist.Run()
+		todolist.Run(":8716")
+	case "user", "-u":
+		user.Run(":9527")
 	default:
 		usage := `
 	firego backend by mingor & firefly
@@ -46,6 +49,7 @@ func main() {
 	-p proxy
 	-d ddl
 	-l leveldb
+	-u user
 		`
 
 		fmt.Println(usage)

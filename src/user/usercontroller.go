@@ -40,8 +40,8 @@ func genAndSetToken(c *gin.Context, user_id string) {
 		return
 	}
 
-	// c.SetCookie("token", tokenString, max_age, "", "firego.cn", true, true)
-	c.SetCookie("token", tokenString, max_age, "", "localhost", false, true)
+	c.SetCookie("token", tokenString, max_age, "", "firego.cn", true, true)
+	//c.SetCookie("token", tokenString, max_age, "", "localhost", false, true)
 
 	c.JSON(http.StatusOK, gin.H{
 		"msg":   "success",

@@ -64,8 +64,8 @@ func AuthMiddleware() gin.HandlerFunc {
 func redirect(ctx *gin.Context) {
 	originUrl := url.QueryEscape(ctx.Request.Referer())
 
-	// redirectUrl := "https://firego.cn/user/login?redirect=" + originUrl
-	redirectUrl := "http://localhost:9527/user/login.html?redirect=" + originUrl
+	redirectUrl := "https://firego.cn/user/login.html?redirect=" + originUrl
+	// redirectUrl := "http://localhost:9527/user/login.html?redirect=" + originUrl
 	logrus.Info("redirect to ", redirectUrl)
 	// ctx.Redirect(302, redirectUrl) // 这里不可以用302，因为axios不响应
 

@@ -4,5 +4,6 @@
 *.out
 data/
 build/
+src/main
 
 .vscode

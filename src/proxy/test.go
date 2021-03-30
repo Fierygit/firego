@@ -4,7 +4,7 @@
  * @Descripttion:
  * @LastEditTime: 2021-03-30 15:50:57
  */
-package main
+package proxy
 
 import "fmt"
 

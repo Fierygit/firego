@@ -10,10 +10,6 @@ golang语言：go1.13.3+ 、
 
 缓存：redis3.0
 
-## 项目地址
-
-https://github.com/guyan0319/go-sso
-
 ## 依赖包：
 
 ```
@@ -23,7 +19,6 @@ github.com/go-xorm/xorm
 github.com/go-sql-driver/mysql
 ```
 
-注意：项目代码依赖管理工具采用的[go-modules](https://github.com/guyan0319/golang_development_notes/blob/master/zh/1.10.md)，需要了解的移步https://github.com/guyan0319/golang_development_notes/blob/master/zh/1.10.md
 
 ## 数据请求类型
 
@@ -204,4 +199,3 @@ $ curl -X POST "http://127.0.0.1:8282/logout" -b "Access_Token=eyJhbGciOiJIUzI1N
 - 用户无法主动登出，即服务端发出token后，无法主动销毁token，用户还可以用通过token访问系统，本项目增加了缓存登出用户token到黑名单的方式，变相实现登出。
 - token续期问题，access_token携带有效期，有效期过了无法自动续期。本项目提供了续期接口（renewal），服务端在生成access_token同时还会生成refresh_token（有效期比access_token长），用户可以通过有效的refresh_token和access_token访问renewal接口重新获取新的refresh_token和access_token。
 
-在使用过程如遇到任何问题，欢迎[issues](https://github.com/guyan0319/go-sso/issues)。

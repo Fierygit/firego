@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2021-03-31 12:27:45
  * @Descripttion:
- * @LastEditTime: 2021-03-31 14:25:18
+ * @LastEditTime: 2021-03-31 15:08:02
  */
 
 package main
@@ -25,10 +25,10 @@ var usage = `
 
 func main() {
 
-	fmt.Println(os.Args[0])
-	for index, i := range os.Args {
-		fmt.Println(index, i, os.Args[index])
-	}
+	// fmt.Println(os.Args[0])
+	// for index, i := range os.Args {
+	// 	fmt.Println(index, i, os.Args[index])
+	// }
 
 	arg_len := len(os.Args)
 	if arg_len <= 1 {

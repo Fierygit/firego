@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-10-16 10:28:36
  * @Descripttion:
- * @LastEditTime: 2020-11-13 15:14:46
+ * @LastEditTime: 2021-03-31 12:19:12
  */
 package main
 
@@ -39,6 +39,8 @@ func main() {
 		todolist.Run(":8716")
 	case "user", "-u":
 		user.Run(":9527")
+	case "opt":
+
 	default:
 		usage := `
 	firego backend by mingor & firefly

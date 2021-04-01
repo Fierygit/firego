@@ -1,2 +1,2 @@
-export const URL = "https://firego.cn"
-// export const URL = "http://127.0.0.1:8716"
+export const URL = "https://todo.firego.cn"
+// export const URL = "http://localhost:8716"

@@ -1,10 +1,10 @@
 import { TodoList } from './TodoList';
-import './App.css';
+import './index.css';
 
 function App() {
 
   return (
-    <div className="App">
+    <div className="min-h-screen bg-gray-900">
       <TodoList />
     </div>
   );

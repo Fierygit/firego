@@ -10,6 +10,7 @@
         body {
             margin: 0;
             padding: 0;
+            background-color: #282c34;
         }
 
         .container {
@@ -53,6 +54,28 @@
             color: black;
             background-color: rgb(223, 153, 62);
         }
+
+        @media screen and (max-width: 960px) {
+            html {
+                font-size: 14px;
+            }
+
+            .login-title {
+                /* left: 15vw; */
+                top: -10vh;
+                font-size: 8rem;
+            }
+
+            .login-form {
+                flex-direction: column;
+                justify-content: space-between;
+                top: -15vh;
+            }
+
+            .login-btn{
+                margin-top: 5vh;
+            }
+        }
     </style>
 </head>
 
@@ -62,14 +85,11 @@
             who are you?
         </p>
 
-        <!-- <form class="login-form" action="/user/login" method="post"> -->
         <div class="login-form">
             <input class="login-username" type="text" placeholder="Enter your name" name="name" required>
 
-            <!-- <button class="login-btn" type="submit">Confirm</button> -->
             <button class="login-btn" type="submit" onclick="login()">Confirm</button>
         </div>
-        <!-- </form> -->
     </div>
 
     <script>

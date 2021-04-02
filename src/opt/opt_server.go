@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2021-03-31 13:29:12
  * @Descripttion:
- * @LastEditTime: 2021-03-31 14:14:17
+ * @LastEditTime: 2021-03-31 18:28:10
  */
 
 package opt
@@ -58,13 +58,13 @@ func put(key string, info opt_info) (bool, string) {
 		logrus.Error("json.marshal failed, err:", err)
 		return false, err.Error()
 	}
-	leveldb := client.NewConnector().SetSize(2).Connect("_opt", "123456") // _opt 是数据库名
+	leveldb := client.NewConnector().SetSize(1).Connect("_opt", "123456") // _opt 是数据库名
 	leveldb.Put(info_table, key, string(data1))                           // 保存秘钥
 	return true, ""
 }
 
 func get(key string) (bool, opt_info) {
-	leveldb := client.NewConnector().SetSize(2).Connect("_opt", "123456") // _opt 是数据库名
+	leveldb := client.NewConnector().SetSize(1).Connect("_opt", "123456") // _opt 是数据库名
 	dataStr := leveldb.Get(info_table, key)
 	ret := opt_info{}
 	if dataStr == "" {

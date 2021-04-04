@@ -1,8 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Todo } from './Todo';
-import './index.css';
 import axios from 'axios';
-import { URL } from "./const";
+import './index.css';
 
 export function TodoList() {
 
@@ -11,7 +10,7 @@ export function TodoList() {
     const [todoName, setTodoName] = useState("");
 
     const getTodolist = useCallback(async () => {
-        const todos = await axios.get(`${URL}/todo`);
+        const todos = await axios.get('/todo');
         setTodoList(todos.data);
     }, []);
 
@@ -25,15 +24,17 @@ export function TodoList() {
             return;
         }
 
-        await axios.post(`${URL}/todo`, {
+        await axios.post('/todo', {
             todo: todoName
         });
+
+        setTodoName('');
 
         getTodolist();
     }, [todoName, getTodolist]);
 
     const removeTodo = useCallback(async (id) => {
-        await axios.post(`${URL}/todo/delete`, {
+        await axios.post('/todo/delete', {
             id
         });
         getTodolist();

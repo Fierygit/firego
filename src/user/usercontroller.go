@@ -22,8 +22,10 @@ func NewUserController() UserController {
 	return UserController{DB: db}
 }
 
-var kv_user_key = "user" // 因为所有用户共用一张表
-var max_age = 60 * 60 * 24 * 7
+const (
+	kv_user_key = "user" // 因为所有用户共用一张表
+	max_age     = 60 * 60 * 24 * 7
+)
 
 func genAndSetToken(c *gin.Context, user_id string) {
 	customClaims := &mid.CustomClaims{

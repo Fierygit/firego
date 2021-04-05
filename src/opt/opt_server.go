@@ -15,11 +15,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var default_opt_len = 6
+const (
+	default_opt_len = 6
 
-var info_table = "_info_table"
+	kv_opt_key = "opt"
 
-var default_start_cnt = 1
+	default_start_cnt = 1
+)
 
 type opt_info struct {
 	Key  string
@@ -58,14 +60,14 @@ func put(key string, info opt_info) (bool, string) {
 		logrus.Error("json.marshal failed, err:", err)
 		return false, err.Error()
 	}
-	leveldb := client.NewConnector().SetSize(1).Connect("_opt", "123456") // _opt 是数据库名
-	leveldb.Put(info_table, key, string(data1))                           // 保存秘钥
+	leveldb := client.NewConnector().SetSize(1).Connect(client.PRE_OPT, "123456") // _opt 是数据库名
+	leveldb.Put(kv_opt_key, key, string(data1))                                   // 保存秘钥
 	return true, ""
 }
 
 func get(key string) (bool, opt_info) {
-	leveldb := client.NewConnector().SetSize(1).Connect("_opt", "123456") // _opt 是数据库名
-	dataStr := leveldb.Get(info_table, key)
+	leveldb := client.NewConnector().SetSize(1).Connect(client.PRE_OPT, "123456") // _opt 是数据库名
+	dataStr := leveldb.Get(kv_opt_key, key)
 	ret := opt_info{}
 	if dataStr == "" {
 		logrus.Info("no user", key)

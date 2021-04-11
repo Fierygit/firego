@@ -4,7 +4,7 @@ module.exports = {
     './src/**/*.vue',
     './src/**/*.jsx',
   ],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class',
   theme: {
     extend: {},
   },

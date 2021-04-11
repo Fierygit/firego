@@ -14,6 +14,15 @@ axios.interceptors.response.use((response) => {
   return error.response;
 });
 
+// tailwind css dark mode
+if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  document.querySelector('html').classList.add('dark')
+  localStorage.theme = 'dark';
+} else {
+  document.querySelector('html').classList.remove('dark')
+  localStorage.theme = 'light';
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

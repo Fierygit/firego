@@ -46,14 +46,14 @@ export function TodoList() {
     }, [addTodo]);
 
     return (<div className="h-full w-full flex flex-col justify-start items-center">
-        <h1 className="text-4xl sm:text-5xl md:text-7xl text-white font-mono font-black mb-5">TodoList App</h1>
+        <h1 className="text-4xl sm:text-5xl md:text-7xl text-black dark:text-white font-mono font-black mb-5 select-none">TodoList App</h1>
         {
             todoList.map(todo => <Todo todo={todo} key={todo.Id} removeTodo={removeTodo} />)
         }
         <div className="flex items-center justify-center m-6 w-full h-12 md:h-10">
-            <input className="text-2xl h-full w-2/3 md:w-1/2 rounded-lg shadow-2xl outline-none" placeholder="add todo here..." value={todoName}
+            <input className="text-2xl h-full w-2/3 md:w-1/2 rounded-lg shadow-2xl bg-gray-700 dark:bg-white outline-none" placeholder="add todo here..." value={todoName}
                 onInput={e => setTodoName(e.target.value)} onKeyPress={onKeyPress}></input>
-            <button className="ml-3 text-xl h-full rounded-2xl bg-green-400 font-bold w-20 md:w-40" onClick={addTodo}>Add</button>
+            <button className="ml-3 text-xl h-full rounded-2xl bg-green-600 dark:bg-green-400 font-bold w-20 md:w-40" onClick={addTodo}>Add</button>
         </div>
     </div>)
 }

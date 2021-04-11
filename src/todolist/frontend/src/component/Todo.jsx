@@ -15,7 +15,7 @@ export function Todo({ todo, removeTodo }) {
     }, [finished, todo.Id]);
 
     return (
-        <div className={`flex relative text-black w-11/12 md:w-4/5 m-1 bg-yellow-500 h-8 md:h-10 items-center rounded-xl border-2 border-opacity-20 ${finished ? 'line-through' : ''}`}>
+        <div className={`flex relative text-black w-11/12 md:w-4/5 m-1 bg-blue-400 dark:bg-yellow-500 h-8 md:h-10 items-center rounded-xl border-black dark:border-white border-2 border-opacity-20 ${finished ? 'line-through' : ''}`}>
             <input className="relative ml-2 checked:bg-blue-600 checked:border-transparent h-4 w-4 md:h-6 md:w-6" checked={finished} type="checkbox" onChange={finishTodo}></input>
             <span className="font-bold text-lg md:text-xl">
                 {todo.Name}

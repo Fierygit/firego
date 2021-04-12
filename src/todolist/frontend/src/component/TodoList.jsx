@@ -2,12 +2,15 @@ import { useState, useCallback, useEffect } from 'react';
 import { Todo } from './Todo';
 import axios from 'axios';
 import './index.css';
+import moment from 'moment';
 
 export function TodoList() {
 
     const [todoList, setTodoList] = useState([]);
 
     const [todoName, setTodoName] = useState("");
+
+    const [now, setNow] = useState(moment().format("MMMM Do YYYY, h:mm:ss a"));
 
     const getTodolist = useCallback(async () => {
         const todos = await axios.get('/todo');
@@ -18,9 +21,15 @@ export function TodoList() {
         getTodolist();
     }, [getTodolist]);
 
+    useEffect(() => {
+        setInterval(() => {
+            setNow(moment().format("MMMM Do YYYY, h:mm:ss a"));
+        }, 1000);
+    }, [setNow]);
+
     const addTodo = useCallback(async () => {
         if (todoName === '') {
-            alert(`${todoName} illegal`);
+            alert(`todo can not be empty!!!`);
             return;
         }
 
@@ -46,14 +55,15 @@ export function TodoList() {
     }, [addTodo]);
 
     return (<div className="h-full w-full flex flex-col justify-start items-center">
-        <h1 className="text-4xl sm:text-5xl md:text-7xl text-black dark:text-white font-mono font-black mb-5 select-none">TodoList App</h1>
+        <h1 className="text-4xl sm:text-5xl md:text-7xl text-black dark:text-white font-mono font-black select-none">TodoList</h1>
+        <h5 className="text-black dark:text-white font-mono">{now}</h5>
         {
             todoList.map(todo => <Todo todo={todo} key={todo.Id} removeTodo={removeTodo} />)
         }
         <div className="flex items-center justify-center m-6 w-full h-12 md:h-10">
             <input className="text-2xl h-full w-2/3 md:w-1/2 rounded-lg shadow-2xl bg-gray-700 dark:bg-white outline-none" placeholder="add todo here..." value={todoName}
                 onInput={e => setTodoName(e.target.value)} onKeyPress={onKeyPress}></input>
-            <button className="ml-3 text-xl h-full rounded-2xl bg-green-600 dark:bg-green-400 font-bold w-20 md:w-40" onClick={addTodo}>Add</button>
+            <button className="ml-3 text-xl h-full rounded-2xl bg-green-400 hover:bg-green-600 font-bold w-20 md:w-40" onClick={addTodo}>Add</button>
         </div>
     </div>)
 }

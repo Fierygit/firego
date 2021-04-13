@@ -15,6 +15,7 @@ import (
 	"firego/src/proxy"
 	"firego/src/todolist"
 	"firego/src/user"
+	"firego/src/autosign"
 	"fmt"
 	"os"
 )
@@ -32,14 +33,15 @@ func main() {
 	case "leveldb", "-l":
 		server.Run()
 	case "testdb":
-		client.TestClient()
+		client.TestClient(os.Args[2], os.Args[3])
 	case "beibei":
 		beibei.Run()
 	case "todolist":
 		todolist.Run(":8716")
 	case "user", "-u":
 		user.Run(":9527")
-	case "opt":
+	case "autosign":
+		autosign.Run(":9528")
 
 	default:
 		usage := `

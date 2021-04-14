@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 自动打卡</title>
+    <style>
+        pre {
+            outline: 1px solid #ccc;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        .string {
+            color: green;
+            word-wrap: break-word;
+        }
+
+        .number {
+            color: darkorange;
+        }
+
+        .boolean {
+            color: blue;
+        }
+
+        .null {
+            color: magenta;
+        }
+
+        .key {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <p6 style="font-size: 30px;">湖南大学疫情防控自动打卡系统</p6>
+
+    <div>
+        <hr>
+        <p> 添加一次账号密码， 每天 00:03 自动执行登录打卡</p>
+        <a href="http://hnu.firego.cn/autosign/getall" title="查看所有">查看所有用户</a>
+
+        </br></br>
+        <p><input class="login-username" type="text" placeholder="输入你的学号"> </p>
+
+        <p><input class="login-pwd" type="text" placeholder="输入你的个人门户密码">
+        <div><button onclick="login()">添加</button> </div>
+        </p>
+        </br>
+
+
+        <br>
+        <div class="ret"></div>
+        <div class="ret2"></div>
+
+
+
+    </div>
+
+
+    <script>
+
+
+        function login() {
+            const params = new URLSearchParams(window.location.search);
+            // const redirect = encodeURIComponent(params.get("redirect"));
+            let url = "/autosign/add";
+            // if (redirect !== null) url += "?redirect=" + redirect;
+
+            const input1 = document.getElementsByClassName("login-username")[0];
+            const name = input1.value.trim();
+            console.log(name)
+
+            const input2 = document.getElementsByClassName("login-pwd")[0];
+            const pwd = input2.value.trim();
+            console.log(pwd)
+
+
+            const body = { id: name, pwd: pwd };
+            if (name === "") {
+                alert("学号为空");
+                return;
+            } if (pwd === "") {
+                alert("密码为空");
+                return;
+            }
+
+            document.getElementsByClassName("ret")[0].innerHTML = '<pre id="result" style="word-wrap:break-word;">' + 'waiting......' + '</pre>';
+
+            fetch(url, {
+                referrer: window.referrer,
+                body: JSON.stringify(body),
+                method: "POST",
+                // mode: "cors"
+            }).then(response => {
+                console.log(response)
+                return response.json()
+            }
+            ).then(res => {
+                console.log(res)
+                msg = res["msg"]
+                res["msg"] = "请查看返回信息！"
+                document.getElementsByClassName("ret")[0].innerHTML = '<pre id="result">' + JsonFormat(res) + '</pre>';
+                console.log(res["msg"])
+                let left = 0;
+                let right = 0;
+                let start = 0;
+                var ret2 = "";
+                for (let i = 0; i < msg.length; i++) {
+                    if (msg[i] === "{") {
+                        if (left === 0) start = i;
+                        left++;
+                    }
+                    if (msg[i] === "}") right++;
+                    console.log(left, right)
+                    if (left === right && left != 0) {
+                        left = right = 0;
+                        tmp = ""
+                        for (let j = start; j <= i; j++) {
+                            tmp += msg[j];
+                        }
+                        var jsonObj = JSON.stringify(JSON.parse(tmp), null, 4)
+                        ret2 += '<pre id="result">' + JsonFormat(jsonObj) + '</pre>';
+
+                    }
+
+                }
+
+                document.getElementsByClassName("ret2")[0].innerHTML = ret2;
+
+            })
+                // .then(res => window.location.href = params.get("redirect"))
+                .catch(err => alert('网络出问题了  ' + err));
+        }
+
+        function JsonFormat(json) {
+            if (typeof json != 'string') {
+                json = JSON.stringify(json, undefined, 2);
+            }
+            json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+    </script>
+
+</body>
+
+</html>

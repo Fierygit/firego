@@ -154,3 +154,46 @@ func (ctl *TodoController) FinishTodo(c *gin.Context) {
 
 	c.JSON(http.StatusOK, todo)
 }
+
+func (ctl *TodoController) EditTodo(c *gin.Context) {
+	type EditTodoReq struct {
+		Id   string `form:"id" json:"id" binding:"required"`
+		Todo string `form:"todo" json:"todo" binding:"required"`
+	}
+	user_id := getUserId(c)
+
+	req := &EditTodoReq{}
+	err := c.BindJSON(&req)
+	if err != nil {
+		logrus.Error("bind json failed, err", err)
+		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		return
+	}
+
+	var todo TodoModel
+	payload := ctl.DB.Get(user_id, req.Id)
+
+	err = json.Unmarshal([]byte(payload), &todo)
+	if err != nil {
+		logrus.Error("Unmarshal failed, ", err)
+		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		return
+	}
+
+	todo.Name = req.Todo
+	logrus.Info()
+
+	var data []byte
+	data, err = json.Marshal(todo)
+	if err != nil {
+		logrus.Error("marshal failed, ", err)
+		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		return
+	}
+
+	logrus.Info(string(data))
+
+	ctl.DB.Put(user_id, req.Id, string(data))
+
+	c.JSON(http.StatusOK, todo)
+}

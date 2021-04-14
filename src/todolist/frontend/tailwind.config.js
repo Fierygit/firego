@@ -12,6 +12,7 @@ module.exports = {
     extend: {
       backgroundColor: ['checked', 'active'],
       borderColor: ['checked'],
+      display: ['group-hover'],
     },
   },
   plugins: [],

@@ -18,6 +18,7 @@ func Run(port string) {
 	r.POST("/todo", todo_controller.AddTodo)
 	r.POST("/todo/delete", todo_controller.RemoveTodo)
 	r.POST("/todo/finish", todo_controller.FinishTodo)
+	r.POST("/todo/edit", todo_controller.EditTodo)
 
 	r.Run(port)
 }

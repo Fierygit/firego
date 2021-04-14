@@ -92,7 +92,7 @@ func (ctl *UserController) Login(c *gin.Context) {
 
 		ctl.DB.Put(kv_user_key, key, value)
 
-		logrus.Info("make a new user", key)
+		logrus.Info("make a new user ", key)
 	} else { // 用户已存在
 		user := &UserModel{}
 		payload := ctl.DB.Get(kv_user_key, req.Name)

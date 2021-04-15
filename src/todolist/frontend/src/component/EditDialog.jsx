@@ -1,31 +1,25 @@
 import { Fragment, useState } from 'react';
-// import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 
 function Modal({ oldName, visible, confirm, cancel }) {
     const [todoName, setTodoName] = useState(oldName);
 
-    // return visible && ReactDOM.createPortal(
-    //     <div className={'fixed z-10 flex-col left-0 top-0 w-96 rounded-2xl bg-black' + visible ? 'block' : 'hidden'}>
-    //         <div>
-    //             <input className='text-black dark:text-gray-700 bg-gray-100 dark:bg-white border border-black outline-none w-96 h-9 text-xl rounded-xl mb-3' type="text" value={todoName} onInput={e => setTodoName(e.target.value)} />
-    //         </div>
-    //         <div className='flex items-center justify-center'>
-    //             <button className='w-20 mr-16 rounded-lg bg-green-400' onClick={(_) => confirm(todoName)}>confirm</button>
-    //             <button className='w-20 bg-gray-100 text-black rounded-lg' onClick={(_) => cancel()}>cancel</button>
-    //         </div>
-    //     </div>
-    //     , document.body);
-    return visible && (
-        <div className={'fixed z-10 flex-col left-0 top-0 w-96 rounded-2xl bg-black' + visible ? 'block' : 'hidden'}>
-            <div>
-                <input className='text-black dark:text-gray-700 bg-gray-100 dark:bg-white border border-black outline-none w-96 h-9 text-xl rounded-xl mb-3' type="text" value={todoName} onInput={e => setTodoName(e.target.value)} />
-            </div>
-            <div className='flex items-center justify-center'>
-                <button className='w-20 mr-16 rounded-lg bg-green-400' onClick={(_) => confirm(todoName)}>confirm</button>
-                <button className='w-20 bg-gray-100 text-black rounded-lg' onClick={(_) => cancel()}>cancel</button>
+    return visible && ReactDOM.createPortal(
+        <div className={visible ? 'block' : 'hidden'}>
+            <div className='w-full min-h-screen z-10 fixed top-0 left-0 flex items-center justify-center bg-gray-900 bg-opacity-80' onClick={cancel}>
+                <div className='flex items-center z-20 justify-center py-6 w-11/12 md:w-1/2 lg:w-1/3 flex-col bg-gray-100 dark:bg-gray-800 rounded-xl' onClick={e => e.stopPropagation()}>
+                    <div className='w-full flex items-center justify-center mb-5'>
+                        <span className='font-bold md:text-lg dark:text-gray-100 select-none'>change to:</span>
+                        <input className='text-white font-bold dark:text-gray-700 bg-gray-700 dark:bg-white ml-1 md:ml-5 outline-none pl-2 h-9 w-3/5 md:text-xl rounded-xl' type="text" value={todoName} onInput={e => setTodoName(e.target.value)} />
+                    </div>
+                    <div className='flex items-center justify-evenly w-full'>
+                        <button className='rounded-lg w-1/4 h-7 bg-green-400 text-gray-100 dark:text-black font-bold select-none' onClick={(_) => confirm(todoName)}>confirm</button>
+                        <button className='bg-gray-500 h-7 dark:bg-gray-100 w-1/4 text-gray-100 dark:text-black rounded-lg font-bold select-none' onClick={(_) => cancel()}>cancel</button>
+                    </div>
+                </div>
             </div>
         </div>
-    );
+        , document.body);
 }
 
 export function EditDialog({ oldName, editTodo }) {

@@ -10,7 +10,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #282c34;
+            background-color: black;
         }
 
         .container {
@@ -19,7 +19,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #282c34;
+            background-color: black;
         }
 
         .login-title {
@@ -27,7 +27,8 @@
             top: -30vh;
             font-size: 7rem;
             font-weight: 600;
-            color: rgb(223, 153, 62);
+            user-select: none;
+            color: #ff9900
         }
 
         .login-form {
@@ -42,7 +43,8 @@
             font-size: 2rem;
             font-weight: 600;
             color: black;
-            outline: hidden;
+            outline: none;
+            border-radius: 1rem;
         }
 
         .login-btn {
@@ -52,7 +54,8 @@
             font-size: 2rem;
             border-radius: 1rem;
             color: black;
-            background-color: rgb(223, 153, 62);
+            background-color: #ff9900;
+            outline: none;
         }
 
         @media screen and (max-width: 960px) {
@@ -95,9 +98,7 @@
     <script>
         function login() {
             const params = new URLSearchParams(window.location.search);
-            // const redirect = encodeURIComponent(params.get("redirect"));
             let url = "/user/login";
-            // if (redirect !== null) url += "?redirect=" + redirect;
 
             const input = document.getElementsByClassName("login-username")[0];
             const name = input.value.trim();

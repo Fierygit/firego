@@ -1,6 +1,6 @@
 import { TodoList } from './TodoList';
 import { ThemeButton } from "./ThemeButton";
-import './index.css';
+import '../index.css';
 
 function App() {
 

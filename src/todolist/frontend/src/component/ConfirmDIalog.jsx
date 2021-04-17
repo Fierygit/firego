@@ -1,7 +1,16 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useRef, useCallback, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 function Modal({ name, visible, confirm, cancel }) {
+    const btnRef = useRef(null);
+
+    const onClick = useCallback(async (e) => {
+        btnRef.current.classList.toggle('cursor-wait');
+        btnRef.current.disabled = true;
+
+        await confirm();
+    }, [confirm, btnRef]);
+
     return visible && ReactDOM.createPortal(
         <div className={visible ? 'block' : 'hidden'}>
             <div className='w-full min-h-screen z-10 fixed top-0 left-0 flex items-center justify-center bg-gray-900 bg-opacity-80' onClick={cancel}>
@@ -10,7 +19,7 @@ function Modal({ name, visible, confirm, cancel }) {
                         <span className='font-bold md:text-lg dark:text-gray-100 select-none'>delete todo: {name} ?</span>
                     </div>
                     <div className='flex items-center justify-evenly w-full'>
-                        <button className='rounded-lg w-1/5 h-7 bg-green-400 text-gray-100 dark:text-black font-bold select-none' onClick={(_) => confirm()}>confirm</button>
+                        <button ref={btnRef} className='disabled:opacity-50 rounded-lg w-1/5 h-7 bg-green-400 text-gray-100 dark:text-black font-bold select-none' onClick={onClick}>confirm</button>
                         <button className='bg-gray-500 h-7 dark:bg-gray-100 w-1/5 text-gray-100 dark:text-black rounded-lg font-bold select-none' onClick={(_) => cancel()}>cancel</button>
                     </div>
                 </div>
@@ -22,6 +31,10 @@ function Modal({ name, visible, confirm, cancel }) {
 export function ConfirmDialog({ id, name, callback }) {
 
     const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        document.addEventListener('keydown', event => event.key === 'Escpase' && setVisible(false), false);
+    }, [setVisible]);
 
     const confirm = async () => {
         await callback(id);

@@ -13,6 +13,7 @@ module.exports = {
       backgroundColor: ['checked', 'active'],
       borderColor: ['checked'],
       display: ['group-hover'],
+      opacity: ['disabled'],
     },
   },
   plugins: [],

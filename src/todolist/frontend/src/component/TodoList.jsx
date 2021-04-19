@@ -33,11 +33,11 @@ export function TodoList() {
     }, [getTodolist]);
 
     return (
-        <div className="min-h-screen w-full flex flex-col justify-start items-center">
+        <div className="min-h-screen w-full flex flex-col justify-start items-center overflow-hidden">
             <h1 className="text-4xl sm:text-5xl md:text-7xl text-black dark:text-white font-mono font-black select-none">TodoList</h1>
             <h5 className="text-black dark:text-white font-mono select-none">{now}</h5>
             {
-                todoList.map(todo => <Todo todo={todo} key={todo.Id} removeTodo={removeTodo} />)
+                todoList.map((todo, i) => <Todo index={i} todo={todo} key={todo.Id} removeTodo={removeTodo} />)
             }
             <AddDialog getTodolist={getTodolist} ></AddDialog>
         </div>

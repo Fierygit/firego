@@ -88,11 +88,13 @@ export function AddDialog({ getTodolist }) {
         <Fragment>
             <Modal visible={visible} confirm={confirm} cancel={cancel} />
             <div className='sticky bottom-0 mt-auto w-full opacity-100' >
-                <button ref={addBtnRef} className="absolute disabled:opacity-50 right-5 md:right-7 bottom-7 md:bottom-10 transform shadow-lg text-xl rounded-full bg-green-400 dark:bg-green-600 hover:scale-110 font-bold px-3 py-3 h-12 w-12 md:h-16 md:w-16 text-gray-200 focus:outline-none" onClick={(_) => setVisible(!visible)}>
-                    <svg className='w-full h-full fill-current' viewBox="0 0 512 512" >
-                        <path d="M492,236H276V20c0-11.046-8.954-20-20-20c-11.046,0-20,8.954-20,20v216H20c-11.046,0-20,8.954-20,20s8.954,20,20,20h216 v216c0,11.046,8.954,20,20,20s20-8.954,20-20V276h216c11.046,0,20-8.954,20-20C512,244.954,503.046,236,492,236z" />
-                    </svg>
-                    <div className='text-sm text-black dark:text-white pt-4'>
+                <button ref={addBtnRef} className="absolute flex flex-col items-center disabled:opacity-50 right-5 md:right-7 bottom-7 md:bottom-10 transform shadow-lg text-xl rounded-full bg-green-400 dark:bg-green-600 hover:scale-110 font-bold px-3 py-3 h-12 w-12 md:h-16 md:w-16 text-gray-200 focus:outline-none" onClick={(_) => setVisible(!visible)}>
+                    <div>
+                        <svg className='w-full h-full fill-current' viewBox="0 0 512 512" >
+                            <path d="M492,236H276V20c0-11.046-8.954-20-20-20c-11.046,0-20,8.954-20,20v216H20c-11.046,0-20,8.954-20,20s8.954,20,20,20h216 v216c0,11.046,8.954,20,20,20s20-8.954,20-20V276h216c11.046,0,20-8.954,20-20C512,244.954,503.046,236,492,236z" />
+                        </svg>
+                    </div>
+                    <div className='hidden md:block text-sm text-black dark:text-white pt-4'>
                         ctrl+c
                     </div>
                 </button>

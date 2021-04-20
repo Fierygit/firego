@@ -14,6 +14,7 @@ module.exports = {
       borderColor: ['checked'],
       display: ['group-hover'],
       opacity: ['disabled'],
+       animation: ['hover'],
     },
   },
   plugins: [],

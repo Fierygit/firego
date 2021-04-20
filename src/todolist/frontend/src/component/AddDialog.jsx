@@ -87,7 +87,7 @@ export function AddDialog({ getTodolist }) {
     return (
         <Fragment>
             <Modal visible={visible} confirm={confirm} cancel={cancel} />
-            <div className='sticky bottom-0 mt-auto w-full opacity-100' >
+            <div className='fixed bottom-0 h-0 w-full opacity-100' >
                 <button ref={addBtnRef} className="absolute flex flex-col items-center disabled:opacity-50 right-5 md:right-7 bottom-7 md:bottom-10 transform shadow-lg text-xl rounded-full bg-green-400 dark:bg-green-600 hover:scale-110 font-bold px-3 py-3 h-12 w-12 md:h-16 md:w-16 text-gray-200 focus:outline-none" onClick={(_) => setVisible(!visible)}>
                     <div>
                         <svg className='w-full h-full fill-current' viewBox="0 0 512 512" >

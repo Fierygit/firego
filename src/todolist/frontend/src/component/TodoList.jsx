@@ -3,12 +3,17 @@ import { Todo } from './Todo';
 import { AddDialog } from "./AddDialog";
 import axios from 'axios';
 import moment from 'moment';
+import { RefreshButton } from './RefreshButton';
 
 export function TodoList() {
 
     const [todoList, setTodoList] = useState([]);
 
     const [now, setNow] = useState(moment().format("MMMM Do YYYY, H:mm:ss"));
+
+    const clearTodoList = useCallback(() => {
+        setTodoList([]);
+    }, [setTodoList]);
 
     const getTodolist = useCallback(async () => {
         const todos = await axios.get('/todo');
@@ -35,11 +40,12 @@ export function TodoList() {
     return (
         <div className="min-h-screen w-full flex flex-col justify-start items-center overflow-hidden">
             <h1 className="text-4xl sm:text-5xl md:text-7xl text-black dark:text-white font-mono font-black select-none">TodoList</h1>
-            <h5 className="text-black dark:text-white font-mono select-none">{now}</h5>
+            <h5 className="text-black dark:text-white font-mono text-xs md:text-base select-none">{now}</h5>
+            <RefreshButton clearTodoList={clearTodoList} getTodolist={getTodolist} />
             {
                 todoList.map((todo, i) => <Todo index={i} todo={todo} key={todo.Id} removeTodo={removeTodo} />)
             }
-            <AddDialog getTodolist={getTodolist} ></AddDialog>
+            <AddDialog getTodolist={getTodolist} />
         </div>
     )
 }

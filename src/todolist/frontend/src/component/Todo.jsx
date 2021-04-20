@@ -1,10 +1,10 @@
 import { useCallback, useRef, useState } from 'react';
-import { snowflake2moment } from '../util';
+import { snowflake2moment, isBefore1day } from '../util';
 import { EditDialog } from "./EditDialog";
 import { ConfirmDialog } from "./ConfirmDIalog";
 import axios from 'axios';
 
-export function Todo({ index, todo, removeTodo }) {
+export function Todo({ index, todo, removeTodo, getTodolist }) {
 
     const [todoName, setTodoName] = useState(todo.Name);
 
@@ -19,7 +19,8 @@ export function Todo({ index, todo, removeTodo }) {
         });
 
         setFinished(!finished);
-    }, [finished, todo.Id]);
+        if (!isBefore1day(todo.Id)) await getTodolist();
+    }, [finished, todo.Id, getTodolist]);
 
     const editTodo = useCallback(async (newName) => {
         await axios.post('/todo/edit', {
@@ -28,7 +29,8 @@ export function Todo({ index, todo, removeTodo }) {
         });
 
         setTodoName(newName);
-    }, [todo.Id, setTodoName]);
+        if (!isBefore1day(todo.Id)) await getTodolist();
+    }, [todo.Id, setTodoName, getTodolist]);
 
     return (
         <div style={{ "animation": `pan ${index * 0.05 + 0.1}s linear 1` }} className={`flex relative group transform text-black dark:text-gray-200 w-full sm:w-11/12 md:w-3/4 lg:w-2/3 mb-1 sm:mb-2 shadow-lg bg-white hover:bg-blue-200 dark:bg-black dark:hover:bg-blue-700 min-h-full md:h-10 items-center justify-start sm:rounded-lg border-black hover:translate-x-2 border-2 border-opacity-20 ${finished ? 'line-through' : ''}`}>
@@ -37,7 +39,7 @@ export function Todo({ index, todo, removeTodo }) {
                 {todoName}
             </span>
             <span className='absolute text-xs hidden sm:inline md:text-base right-2 md:right-4 select-none font-medium group-hover:hidden'>
-                {snowflake2moment(todo.Id)}
+                {snowflake2moment(todo.Id).calendar()}
             </span>
             <EditDialog btnRef={editBtnRef} oldName={todoName} editTodo={editTodo} />
             <ConfirmDialog id={todo.Id} name={todoName} callback={removeTodo}></ConfirmDialog>

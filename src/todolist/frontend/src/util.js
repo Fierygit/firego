@@ -12,6 +12,12 @@ export function snowflake2unixtime(snowflake) {
 export function snowflake2moment(snowflake) {
     let create_time = moment.unix(snowflake2unixtime(snowflake).toNumber() / 1000);
 
-    // return create_time.fromNow()
-    return create_time.calendar()
+    return create_time
+}
+
+export function isBefore1day(snowflake){
+    let create_time = snowflake2moment(snowflake);
+    let yesterday  = moment(new Date()).add(-1,'days');
+
+    return create_time.isBefore(yesterday);
 }

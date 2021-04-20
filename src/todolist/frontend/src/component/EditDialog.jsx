@@ -10,9 +10,8 @@ function Modal({ oldName, visible, confirm, cancel }) {
         btnRef.current.disabled = true;
 
         await confirm(todoName);
-        setTodoName("");
 
-    }, [confirm, setTodoName, todoName, btnRef]);
+    }, [confirm, todoName, btnRef]);
 
     const onKeyPress = useCallback((e) => {
         if (e.which !== 13) return;

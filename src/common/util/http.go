@@ -8,7 +8,7 @@ import (
 )
 
 func MakeSlackBotReq(text string) {
-	url := "https://hooks.slack.com/services/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"
+	url := "https://hooks.slack.com/services/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"
 
 	payload := strings.NewReader(fmt.Sprintf("{\"text\": \"%s\"}", text))
 

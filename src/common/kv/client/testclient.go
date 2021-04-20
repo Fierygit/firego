@@ -23,6 +23,8 @@ func TestClient(what, user_id string) {
             getAllUser()
         case "todo":
             getAllTodo(user_id)
+        case "opt":
+            getAllOpt(user_id)
         default:
 	        logrus.Warn("invalid input")
     }
@@ -59,6 +61,14 @@ func getAllUser(){
 
 func getAllTodo(user_id string){
 	leveldb := NewConnector().SetSize(2).Connect(PRE_TODO, "123456")
+
+    for i, todo := range leveldb.BatchGet(user_id){
+	    logrus.Info(i, todo)
+    }
+}
+
+func getAllOpt(user_id string){
+	leveldb := NewConnector().SetSize(2).Connect(PRE_OPT, "123456")
 
     for i, todo := range leveldb.BatchGet(user_id){
 	    logrus.Info(i, todo)

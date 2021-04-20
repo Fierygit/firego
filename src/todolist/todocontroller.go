@@ -138,7 +138,6 @@ func (ctl *TodoController) FinishTodo(c *gin.Context) {
 	}
 
 	todo.Finished = req.Finished
-	logrus.Info()
 
 	var data []byte
 	data, err = json.Marshal(todo)
@@ -181,7 +180,6 @@ func (ctl *TodoController) EditTodo(c *gin.Context) {
 	}
 
 	todo.Name = req.Todo
-	logrus.Info()
 
 	var data []byte
 	data, err = json.Marshal(todo)

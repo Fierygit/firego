@@ -15,6 +15,7 @@ module.exports = {
       display: ['group-hover'],
       opacity: ['disabled'],
       animation: ['hover'],
+      cursor: ['disabled'],
     },
   },
   plugins: [],

@@ -7,7 +7,6 @@ function Modal({ visible, confirm, cancel }) {
     const btnRef = useRef(null);
 
     const onClick = useCallback(async (e) => {
-        btnRef.current.classList.toggle('cursor-wait');
         btnRef.current.disabled = true;
 
         await confirm(todoName);
@@ -30,7 +29,7 @@ function Modal({ visible, confirm, cancel }) {
                         <input className='text-white font-bold dark:text-gray-700 bg-gray-700 dark:bg-white ml-1 md:ml-5 outline-none pl-2 h-9 w-3/4 md:text-xl rounded-xl' autoFocus type="text" value={todoName} onInput={e => setTodoName(e.target.value)} onKeyPress={onKeyPress} />
                     </div>
                     <div className='flex items-center justify-evenly w-full'>
-                        <button ref={btnRef} className='disabled:opacity-50 rounded-lg w-1/5 h-7 bg-green-400 dark:bg-green-600 text-gray-100 dark:text-black font-bold select-none focus:outline-none' onClick={onClick}>confirm</button>
+                        <button ref={btnRef} className='disabled:opacity-50 disabled:cursor-wait rounded-lg w-1/5 h-7 bg-green-400 dark:bg-green-600 text-gray-100 dark:text-black font-bold select-none focus:outline-none' onClick={onClick}>confirm</button>
                         <button className='bg-gray-500 w-1/5 h-7 dark:bg-gray-100 text-gray-100 dark:text-black rounded-lg font-bold select-none focus:outline-none' onClick={(_) => cancel()}>cancel</button>
                     </div>
                 </div>
@@ -55,7 +54,7 @@ export function AddDialog({ getTodolist }) {
 
             event.key === 'Escape' && setVisible(false)
 
-            event.ctrlKey && keyName === 'c' && addBtnRef.current.click();
+            event.ctrlKey && keyName === 'm' && addBtnRef.current.click();
 
         }, false);
 
@@ -87,7 +86,7 @@ export function AddDialog({ getTodolist }) {
     return (
         <Fragment>
             <Modal visible={visible} confirm={confirm} cancel={cancel} />
-            <div className='fixed bottom-0 h-0 w-full opacity-100' >
+            <div className='pan fixed bottom-0 h-0 w-full opacity-100' >
                 <button ref={addBtnRef} className="absolute flex flex-col items-center disabled:opacity-50 right-5 md:right-7 bottom-7 md:bottom-10 transform shadow-lg text-xl rounded-full bg-green-400 dark:bg-green-600 hover:scale-110 font-bold px-3 py-3 h-12 w-12 md:h-16 md:w-16 text-gray-200 focus:outline-none" onClick={(_) => setVisible(!visible)}>
                     <div>
                         <svg className='w-full h-full fill-current' viewBox="0 0 512 512" >
@@ -95,7 +94,7 @@ export function AddDialog({ getTodolist }) {
                         </svg>
                     </div>
                     <div className='hidden md:block text-sm text-black dark:text-white pt-4'>
-                        ctrl+c
+                        ctrl+m
                     </div>
                 </button>
             </div>

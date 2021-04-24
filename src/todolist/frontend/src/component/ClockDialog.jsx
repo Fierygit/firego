@@ -18,12 +18,14 @@ function Modal({ visible, confirm, cancel }) {
 
         if (isNaN(time) || time === 0) {
             alert('invalid input');
-            btnRef.current.classList.toggle('cursor-wait');
             btnRef.current.disabled = false;
             return;
         }
 
         switch (time_unit) {
+            case 'second':
+                now.add(time, 'seconds')
+                break;
             case 'minute':
                 now.add(time, 'minutes')
                 break;
@@ -54,7 +56,7 @@ function Modal({ visible, confirm, cancel }) {
                                     type="text"
                                     name="time"
                                     id="time"
-                                    className="ring-2 ring-indigo-500 dark:ring-gray-500  block w-full pl-7 pr-12 text-lg  dark:border-black rounded-md select-none"
+                                    className="ring-2 ring-indigo-500 dark:ring-gray-500  block w-full pl-7 pr-12 text-lg  dark:border-black rounded-md"
                                     placeholder="0"
                                 />
                                 <div className="absolute inset-y-0 right-0 flex items-center">
@@ -63,8 +65,10 @@ function Modal({ visible, confirm, cancel }) {
                                         ref={timeUnitRef}
                                         id="time_unit"
                                         name="time_unit"
+                                        defaultValue={'minute'}
                                         className="h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 text-base font-bold rounded-md select-none"
                                     >
+                                        <option>second</option>
                                         <option>minute</option>
                                         <option>hour</option>
                                         <option>day</option>
@@ -74,7 +78,7 @@ function Modal({ visible, confirm, cancel }) {
                         </div>
                     </div>
                     <div className='flex items-center justify-evenly w-full'>
-                        <button ref={btnRef} className='disabled:opacity-50 rounded-lg w-1/5 h-7 bg-green-400 dark:bg-green-600 text-gray-100 dark:text-black font-bold select-none focus:outline-none' onClick={onClick}>confirm</button>
+                        <button ref={btnRef} className='disabled:opacity-50 disabled:cursor-wait rounded-lg w-1/5 h-7 bg-green-400 dark:bg-green-600 text-gray-100 dark:text-black font-bold select-none focus:outline-none' onClick={onClick}>confirm</button>
                         <button className='bg-gray-500 w-1/5 h-7 dark:bg-gray-100 text-gray-100 dark:text-black rounded-lg font-bold select-none focus:outline-none' onClick={(_) => cancel()}>cancel</button>
                     </div>
                 </div>
@@ -93,6 +97,7 @@ export function ClockDialog({ todo }) {
 
     const confirm = async (expire) => {
         todo.expire = expire;
+        todo.retry = 0;
         addRemindTodo(todo);
         setVisible(false);
     };
@@ -104,7 +109,7 @@ export function ClockDialog({ todo }) {
     return (
         <Fragment>
             <Modal visible={visible} confirm={confirm} cancel={cancel} />
-            <button title='clock' className='absolute hidden md:group-hover:block transform right-14 md:right-20 w-8 md:w-10 h-4/5 hover:scale-125 select-none focus:outline-none' onClick={() => setVisible(!visible)}>
+            <button title='clock' className='absolute hidden lg:group-hover:block transform right-14 md:right-20 w-8 md:w-10 h-4/5 hover:scale-125 select-none focus:outline-none' onClick={() => setVisible(!visible)}>
                 <svg className='w-full h-full fill-current' viewBox="0 0 500 500"><g>
                     <g>
                         <path d="M256.001,77.017c-107.656,0-195.244,87.589-195.244,195.244c0,107.662,87.589,195.25,195.244,195.25

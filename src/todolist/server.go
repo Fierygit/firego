@@ -22,6 +22,7 @@ func Run(port string) {
 	todo_controller := NewTodoController()
 
 	r.Use(mid.CORSMiddleware())
+	r.Use(mid.AuthMiddleware())
 	r.GET("/todo", todo_controller.GetTodo)
 	r.POST("/todo", todo_controller.AddTodo)
 	r.POST("/todo/delete", todo_controller.RemoveTodo)

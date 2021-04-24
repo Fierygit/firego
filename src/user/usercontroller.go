@@ -1,7 +1,6 @@
 package user
 
 import (
-	"encoding/json"
 	"firego/src/common/kv/client"
 	mid "firego/src/common/middleware"
 	"firego/src/common/util"
@@ -77,10 +76,7 @@ func (ctl *UserController) Login(c *gin.Context) {
 
 		logrus.Info("make a new user ", user.Name)
 	} else { // 用户已存在
-		user := &UserModel{}
-		payload := ctl.DB.Get(kv_user_key, req.Name)
-
-		err := json.Unmarshal([]byte(payload), user)
+		user, err := GetUser(ctl.DB, req.Name)
 		if util.CheckAndResponseError(err, c) {
 			return
 		}

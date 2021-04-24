@@ -32,6 +32,18 @@ func AddUser(db client.Leveldb, user_id, name string) (UserModel, error) {
 	return user, nil
 }
 
+func GetUser(db client.Leveldb, username string) (UserModel, error) {
+	user := UserModel{}
+	payload := db.Get(kv_user_key, username)
+
+	err := msgpack.Unmarshal([]byte(payload), &user)
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
+}
+
 func BatchGetUser(db client.Leveldb) ([]UserModel, error) {
 	users := db.BatchGet(kv_user_key)
 

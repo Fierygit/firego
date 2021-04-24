@@ -6,6 +6,7 @@ import (
 	"firego/src/common/util"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -112,9 +113,13 @@ func (ctl *TodoController) RemoveTodo(c *gin.Context) {
 	ctl.DB.Delete(user_id, req.Id)
 
 	// 删除时间  有 批处理  user-id , 新建一张表
-	times := ctl.DB.Get(getTimesKey(user_id),req.Id)
+	times := ctl.DB.Get(getTimesKey(user_id), req.Id)
 
-	split()
+	times_slice := strings.Split(times, ";")
+
+	for _, val := range times_slice {
+		ctl.DB.Delete(getTimesKey(user_id), val)
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"msg": "success",

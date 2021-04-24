@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"firego/src/common/kv/client"
 	"firego/src/common/util"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -29,7 +31,8 @@ func getUserId(c *gin.Context) string {
 
 func (ctl *TodoController) AddTodo(c *gin.Context) {
 	type AddTodoReq struct {
-		Todo string `form:"todo" json:"todo" binding:"required"`
+		Content string `form:"content" json:"content" binding:"required"`
+		Daily   bool   `form:"daily" json:"daily" binding:"required"`
 	}
 	user_id := getUserId(c)
 
@@ -44,8 +47,9 @@ func (ctl *TodoController) AddTodo(c *gin.Context) {
 	id := util.GetSnowflake().String()
 	todo := TodoModel{
 		Id:       id,
-		Name:     req.Todo,
+		Content:  req.Content,
 		Finished: false,
+		Daily:    req.Daily,
 	}
 	data, err := json.Marshal(todo)
 	if err != nil {
@@ -106,6 +110,11 @@ func (ctl *TodoController) RemoveTodo(c *gin.Context) {
 	}
 
 	ctl.DB.Delete(user_id, req.Id)
+
+	// 删除时间  有 批处理  user-id , 新建一张表
+	times := ctl.DB.Get(getTimesKey(user_id),req.Id)
+
+	split()
 
 	c.JSON(http.StatusOK, gin.H{
 		"msg": "success",
@@ -179,7 +188,7 @@ func (ctl *TodoController) EditTodo(c *gin.Context) {
 		return
 	}
 
-	todo.Name = req.Todo
+	todo.Content = req.Todo
 
 	var data []byte
 	data, err = json.Marshal(todo)
@@ -194,4 +203,16 @@ func (ctl *TodoController) EditTodo(c *gin.Context) {
 	ctl.DB.Put(user_id, req.Id, string(data))
 
 	c.JSON(http.StatusOK, todo)
+}
+
+func getTodayKey(user_id string) string {
+	return "time-" + user_id + "-" + getTimeStr()
+}
+
+func getTimesKey(user_id string) string {
+	return "time-" + user_id
+}
+
+func getTimeStr() string {
+	return fmt.Sprint(time.Now().Year(), "-", time.Now().Month(), "-", time.Now().Day())
 }

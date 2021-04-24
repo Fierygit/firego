@@ -2,7 +2,7 @@
  * @Author: Firefly
  * @Date: 2020-10-16 19:20:39
  * @Descripttion:
- * @LastEditTime: 2020-10-17 15:51:08
+ * @LastEditTime: 2021-04-23 16:57:26
  */
 package server
 
@@ -67,6 +67,7 @@ func (*RPCMethods) Has(req *model.Req, reply *bool) error {
 func (*RPCMethods) Delete(req *model.Req, reply *string) error {
 	logrus.Info("delete  ", req)
 	err := GetInstance().Delete(req.Pair.Key)
+
 	if err != nil {
 		logrus.Warn(err)
 	}

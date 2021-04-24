@@ -22,11 +22,6 @@ func Run(port string) {
 	todo_controller := NewTodoController()
 
 	r.Use(mid.CORSMiddleware())
-	r.Use(func() gin.HandlerFunc {
-		return func(ctx *gin.Context) {
-			ctx.Set("user_id", "agkr3xrmv2f4")
-		}
-	}())
 	r.GET("/todo", todo_controller.GetTodo)
 	r.POST("/todo", todo_controller.AddTodo)
 	r.POST("/todo/delete", todo_controller.RemoveTodo)

@@ -1,8 +1,9 @@
 package user
 
 import (
-	"encoding/json"
 	"firego/src/common/kv/client"
+
+	"github.com/vmihailenco/msgpack"
 )
 
 const (
@@ -20,7 +21,7 @@ func AddUser(db client.Leveldb, user_id, name string) (UserModel, error) {
 		Uid:  user_id,
 		Name: name,
 	}
-	data, err := json.Marshal(user)
+	data, err := msgpack.Marshal(user)
 	if err != nil {
 		return user, err
 	}
@@ -29,6 +30,23 @@ func AddUser(db client.Leveldb, user_id, name string) (UserModel, error) {
 	db.Put(kv_user_key, key, value)
 
 	return user, nil
+}
+
+func BatchGetUser(db client.Leveldb) ([]UserModel, error) {
+	users := db.BatchGet(kv_user_key)
+
+	user_list := make([]UserModel, 0)
+
+	for _, t := range users {
+		var user UserModel
+		err := msgpack.Unmarshal([]byte(t), &user)
+		if err != nil {
+			return user_list, err
+		}
+		user_list = append(user_list, user)
+	}
+
+	return user_list, nil
 }
 
 func HasUser(db client.Leveldb, username string) bool {

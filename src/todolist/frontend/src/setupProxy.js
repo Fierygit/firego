@@ -14,8 +14,8 @@ module.exports = (app) => {
       target: "http://localhost:8716",
       changeOrigin: true,
       headers: {
-        cookie:
-          "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJhZ2w4cDh4Ymswc2ciLCJleHAiOjE2MTk1MjU5MDV9.2-IusUVLrZqkaZD6jCKLhxNIfkupGb9HwY9hZJMfKlA",
+        // cookie:
+        //   "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJhZ2w4cDh4Ymswc2ciLCJleHAiOjE2MTk1MjU5MDV9.2-IusUVLrZqkaZD6jCKLhxNIfkupGb9HwY9hZJMfKlA",
       },
     })
   );

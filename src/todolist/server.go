@@ -24,7 +24,7 @@ func Run(port string) {
 	r.Use(mid.CORSMiddleware())
 	r.Use(func() gin.HandlerFunc {
 		return func(ctx *gin.Context) {
-			ctx.Set("user_id", "test")
+			ctx.Set("user_id", "agkr3xrmv2f4")
 		}
 	}())
 	r.GET("/todo", todo_controller.GetTodo)

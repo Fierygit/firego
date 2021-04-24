@@ -8,11 +8,11 @@
 package opt
 
 import (
-	"encoding/json"
 	"firego/src/common/kv/client"
 	"fmt"
 
 	"github.com/sirupsen/logrus"
+	"github.com/vmihailenco/msgpack"
 )
 
 const (
@@ -55,9 +55,9 @@ func GetOpt(info string) (optCode string) {
 
 // 不公开类
 func put(key string, info opt_info) (bool, string) {
-	data1, err := json.Marshal(info)
+	data1, err := msgpack.Marshal(info)
 	if err != nil {
-		logrus.Error("json.marshal failed, err:", err)
+		logrus.Error("msgpack.marshal failed, err:", err)
 		return false, err.Error()
 	}
 	leveldb := client.NewConnector().SetSize(1).Connect(client.PRE_OPT, "123456") // _opt 是数据库名
@@ -73,7 +73,7 @@ func get(key string) (bool, opt_info) {
 		logrus.Info("no user", key)
 		return false, ret
 	}
-	err := json.Unmarshal([]byte(dataStr), &ret)
+	err := msgpack.Unmarshal([]byte(dataStr), &ret)
 	if err != nil {
 		fmt.Println("Umarshal failed:", err)
 		return false, ret

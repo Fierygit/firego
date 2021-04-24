@@ -86,6 +86,15 @@ func (db *Leveldb) BatchGet(id string) []string {
 	return (db.call(&tmpKey, &valueTmp, "batchget")).([]string)
 }
 
+//BatchGetAll 扫表(所有用户)
+func (db *Leveldb) BatchGetAll() []string {
+	// 1、类型检查， 只有string！！！
+	// todo 自定义序列化
+	tmpKey := db.name
+	valueTmp := ""
+	return (db.call(&tmpKey, &valueTmp, "batchget")).([]string)
+}
+
 //Put put
 func (db *Leveldb) Put(id, key, value string) {
 	//todo 自定义序列化

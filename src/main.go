@@ -7,15 +7,15 @@
 package main
 
 import (
+	"firego/src/autosign"
 	"firego/src/beibei"
-	"firego/src/common/kv/client"
+	"firego/src/common/kv"
 	"firego/src/common/kv/server"
 	_ "firego/src/common/log"
 	"firego/src/home"
 	"firego/src/proxy"
 	"firego/src/todolist"
 	"firego/src/user"
-	"firego/src/autosign"
 	"fmt"
 	"os"
 )
@@ -33,7 +33,7 @@ func main() {
 	case "leveldb", "-l":
 		server.Run()
 	case "testdb":
-		client.TestClient(os.Args[2], os.Args[3])
+		kv.TestClient(os.Args[2], os.Args[3])
 	case "beibei":
 		beibei.Run()
 	case "todolist":

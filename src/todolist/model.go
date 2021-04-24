@@ -1,9 +1,10 @@
 package todolist
 
 import (
-	"encoding/json"
 	"firego/src/common/kv/client"
 	"time"
+
+	"github.com/vmihailenco/msgpack"
 )
 
 /*
@@ -34,7 +35,7 @@ func Addtodo(db client.Leveldb, user_id, todo_id, name string, finished, daily b
 		Daily:    daily,
 	}
 
-	data, err := json.Marshal(todo)
+	data, err := msgpack.Marshal(todo)
 	if err != nil {
 		return TodoModel{}, err
 	}
@@ -52,7 +53,7 @@ func DeleteTodo(db client.Leveldb, user_id, todo_id string) {
 
 func UpdateTodo(db client.Leveldb, user_id, todo_id string, newTodo TodoModel) error {
 	var data []byte
-	data, err := json.Marshal(newTodo)
+	data, err := msgpack.Marshal(newTodo)
 	if err != nil {
 		return err
 	}
@@ -66,7 +67,7 @@ func GetTodo(db client.Leveldb, user_id, todo_id string) (TodoModel, error) {
 	var todo TodoModel
 	payload := db.Get(user_id, todo_id)
 
-	err := json.Unmarshal([]byte(payload), &todo)
+	err := msgpack.Unmarshal([]byte(payload), &todo)
 	if err != nil {
 		return todo, err
 	}
@@ -81,7 +82,7 @@ func BatchGetTodo(db client.Leveldb, user_id string) ([]TodoModel, error) {
 
 	for _, t := range todos {
 		var todo TodoModel
-		err := json.Unmarshal([]byte(t), &todo)
+		err := msgpack.Unmarshal([]byte(t), &todo)
 		if err != nil {
 			return todo_list, err
 		}

@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+body::-webkit-scrollbar {
+  width: 10px; 
+}
+
+body::-webkit-scrollbar-track {
+  background: #556581;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #FFF;
+}
+
+.dark body::-webkit-scrollbar-thumb {
+  background: #000;
+}
+
 .form-tick:checked {
   background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
 }
@@ -16,5 +32,18 @@
 }
 
 .pan {
-  animation: pan 0.2s linear 1;
+  animation: pan 0.7s cubic-bezier(0.1, 0.87, 0.78, 1.35) 1;
+}
+
+@keyframes pan_y {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}
+
+.pan_y {
+  animation: pan_y 0.7s cubic-bezier(0.1, 0.87, 0.78, 1.35) 1;
 }

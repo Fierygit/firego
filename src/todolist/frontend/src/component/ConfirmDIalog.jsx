@@ -5,7 +5,6 @@ function Modal({ name, visible, confirm, cancel }) {
     const btnRef = useRef(null);
 
     const onClick = useCallback(async (e) => {
-        btnRef.current.classList.toggle('cursor-wait');
         btnRef.current.disabled = true;
 
         await confirm();
@@ -19,7 +18,7 @@ function Modal({ name, visible, confirm, cancel }) {
                         <span className='font-bold md:text-lg dark:text-gray-100 select-none'>delete todo: {name} ?</span>
                     </div>
                     <div className='flex items-center justify-evenly w-full'>
-                        <button ref={btnRef} className='disabled:opacity-50 rounded-lg w-1/5 h-7 bg-red-600 dark:bg-red-600 text-gray-100 dark:text-black font-bold select-none focus:outline-none' onClick={onClick}>confirm</button>
+                        <button ref={btnRef} className='disabled:opacity-50 disabled:cursor-wait rounded-lg w-1/5 h-7 bg-red-600 dark:bg-red-800 text-gray-100 dark:text-black font-bold select-none focus:outline-none' onClick={onClick}>confirm</button>
                         <button className='bg-gray-500 h-7 dark:bg-gray-100 w-1/5 text-gray-100 dark:text-black rounded-lg font-bold select-none focus:outline-none' onClick={(_) => cancel()}>cancel</button>
                     </div>
                 </div>

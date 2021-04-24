@@ -8,43 +8,75 @@
     <title>firego user login</title>
     <style>
         body {
+            font-family: Arial, Helvetica, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-items: center;
+            min-height: 100vh;
+        }
+
+        .main {
+            position: relative;
+            height: 80vh;
+            width: 40vw;
+            top: 10vh;
+        }
+
+        .background {
+            position: absolute;
+            background-image: radial-gradient(rgba(52, 211, 153, 1), rgba(52, 211, 153, 1));
+            transform: rotate(-5deg);
+            border-radius: 1rem;
+            height: 100%;
+            width: 100%;
+            z-index: -1;
+        }
+
+        .background2 {
+            position: absolute;
+            background-image: radial-gradient(rgba(4, 211, 238, 1), rgba(34, 211, 238, 1));
+            transform: rotate(-10deg);
+            border-radius: 1rem;
+            height: 100%;
+            width: 100%;
+            z-index: -2;
         }
 
         .container {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: black;
+            border-radius: 1rem;
+            height: 100%;
+            width: 100%;
+            background-color: white;
+            border: gray 1px solid;
         }
 
-        .login-title {
-            position: relative;
-            top: -30vh;
-            font-size: 7rem;
-            font-weight: 600;
+        .container h1 {
             user-select: none;
-            color: #ff9900
+            font-size: 5rem;
+            font-weight: 400;
+            color: black;
         }
 
         .login-form {
             position: relative;
-            top: -30vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
         }
 
         .login-username {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 600;
             color: black;
             outline: none;
-            border-radius: 1rem;
+            border-radius: 0.2rem;
         }
 
         .login-btn {
@@ -53,45 +85,71 @@
             font-weight: 600;
             font-size: 2rem;
             border-radius: 1rem;
+            margin-top: 3rem;
             color: black;
-            background-color: #ff9900;
             outline: none;
         }
 
-        @media screen and (max-width: 960px) {
+        .footer {
+            width: 100%;
+            position: absolute;
+            bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: black;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                color: white;
+                background-color: black;
+            }
+
+            .container {
+                border: none;
+            }
+        }
+
+        @media screen and (max-width: 640px) {
+            html {
+                font-size: 10px;
+            }
+
+            .main {
+                width: 70vw;
+            }
+        }
+
+        @media screen and (min-width: 640px) and (max-width: 1024px) {
             html {
                 font-size: 14px;
             }
 
-            .login-title {
-                /* left: 15vw; */
-                top: -10vh;
-                font-size: 8rem;
-            }
-
-            .login-form {
-                flex-direction: column;
-                justify-content: space-between;
-                top: -15vh;
-            }
-
-            .login-btn{
-                margin-top: 5vh;
+            .main {
+                width: 55vw;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <p class="login-title">
-            who are you?
-        </p>
+    <div class="main">
+        <div class="background"></div>
+        <div class="background2"></div>
+        <div class="container">
+            <h1>login</h1>
 
-        <div class="login-form">
-            <input class="login-username" type="text" placeholder="Enter your name" name="name" required>
+            <div class="login-form">
+                <input class="login-username" type="text" placeholder="Enter your name" name="name" required>
 
-            <button class="login-btn" type="submit" onclick="login()">Confirm</button>
+                <button class="login-btn" type="submit" onclick="login()">Confirm</button>
+            </div>
+
+            <div class="footer">
+                <h3>a web site powered by firefly and mingor</h3>
+            </div>
         </div>
     </div>
 

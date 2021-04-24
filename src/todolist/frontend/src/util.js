@@ -29,21 +29,21 @@ export function addRemindTodo(todo) {
     localStorage.remindTodos = JSON.stringify(remindTodos);
 }
 
-export function removeRemindTodo(todo) {
+export function removeRemindTodo(todoId) {
     let remindTodos = localStorage.remindTodos === undefined ? { todos: [] } : JSON.parse(localStorage.remindTodos);
 
-    remindTodos.todos = remindTodos.todos.filter((t) => t.Id !== todo.Id);
+    remindTodos.todos = remindTodos.todos.filter((t) => t.Id !== todoId);
     localStorage.remindTodos = JSON.stringify(remindTodos);
 }
 
 function showRemindTodo(todo) {
     if (Notification.permission !== 'granted') {
         Notification.requestPermission(() => { });
-        return false;
+        return;
     }
 
     if (moment().isBefore(todo.expire))
-        return false;
+        return;
 
     const config = {
         body: todo.Name,
@@ -51,21 +51,37 @@ function showRemindTodo(todo) {
         tag: todo.Id,
     }
 
-    new Notification('todo提醒', config);
-
-    return true;
+    const notification = new Notification('todo提醒', config);
+    notification.onshow = (e) => {
+        e.preventDefault();
+        removeRemindTodo(todo.Id);
+        if (todo.retry < 3) {
+            todo.retry = todo.retry + 1;
+            todo.expire = moment(new Date()).add(5, 'minutes');
+            addRemindTodo(todo);
+        }
+    };
+    notification.onclick = (e) => {
+        e.preventDefault();
+        removeRemindTodo(todo.Id);
+        // window.open('https://todo.firego.cn', '');
+    };
+    notification.onclose = (e) => {
+        e.preventDefault();
+        removeRemindTodo(todo.Id);
+    };
 }
 
 export function checkRemindTodo() {
-    if (localStorage.remindTodos === undefined) return;
+    if (localStorage.remindTodos === undefined) return [];
     let remindTodos = JSON.parse(localStorage.remindTodos);
 
-    if (remindTodos.todos.length === 0) return;
+    if (remindTodos.todos.length === 0) return [];
 
     for (let todo of remindTodos.todos) {
         todo.expire = moment(todo.expire);
-        if (showRemindTodo(todo)){
-            removeRemindTodo(todo);
-        }
+        showRemindTodo(todo);
     }
+
+    return remindTodos.todos;
 }

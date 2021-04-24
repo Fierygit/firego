@@ -54,6 +54,7 @@ func AuthMiddleware() gin.HandlerFunc {
 			redirect(ctx)
 			ctx.Abort()
 		} else {
+			logrus.Info("user_id: ", claims.UserId)
 			ctx.Set("user_id", claims.UserId)
 			ctx.Next()
 		}

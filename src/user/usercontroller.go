@@ -23,8 +23,7 @@ func NewUserController() UserController {
 }
 
 const (
-	kv_user_key = "user" // 因为所有用户共用一张表
-	max_age     = 60 * 60 * 24 * 7
+	max_age = 60 * 60 * 24 * 7
 )
 
 func genAndSetToken(c *gin.Context, user_id string) {
@@ -37,13 +36,11 @@ func genAndSetToken(c *gin.Context, user_id string) {
 	//采用HMAC SHA256加密算法
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, customClaims)
 	tokenString, err := token.SignedString([]byte(mid.SECRETKEY))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+	if util.CheckAndResponseError(err, c) {
 		return
 	}
 
 	c.SetCookie("token", tokenString, max_age, "", "firego.cn", true, true)
-	//c.SetCookie("token", tokenString, max_age, "", "localhost", false, true)
 
 	c.JSON(http.StatusOK, gin.H{
 		"msg":   "success",
@@ -57,51 +54,34 @@ func (ctl *UserController) Login(c *gin.Context) {
 	}
 	req := &LoginReq{}
 	err := c.BindJSON(&req)
-	if err != nil {
-		logrus.Error("bind json failed, err", err)
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+	if util.CheckAndResponseError(err, c) {
 		return
 	}
 
 	if req.Name == "" {
 		logrus.Error("name can not be empty")
-		c.JSON(http.StatusBadRequest, gin.H{"msg": "name can not be empty"})
-		return
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"msg": "name can not be empty"})
 	}
 
-	hasBeen := ctl.DB.Has(kv_user_key, req.Name)
+	hasBeen := HasUser(ctl.DB, req.Name)
 	uid := ""
 
 	// 用户不存在
 	if !hasBeen {
 		// 添加新用户
 		uid = util.GetSnowflake().Base36()
-		user := UserModel{
-			Uid:  uid,
-			Name: req.Name,
-		}
-		data, err := json.Marshal(user)
-		if err != nil {
-			logrus.Error("json.marshal failed, err:", err)
-			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		user, err := AddUser(ctl.DB, uid, req.Name)
+		if util.CheckAndResponseError(err, c) {
 			return
 		}
 
-		key := req.Name
-		value := string(data)
-
-		ctl.DB.Put(kv_user_key, key, value)
-
-		util.MakeSlackBotReq("new user: " + key)
-		logrus.Info("make a new user ", key)
+		logrus.Info("make a new user ", user.Name)
 	} else { // 用户已存在
 		user := &UserModel{}
 		payload := ctl.DB.Get(kv_user_key, req.Name)
 
 		err := json.Unmarshal([]byte(payload), user)
-		if err != nil {
-			logrus.Error("Unmarshal failed, ", err)
-			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		if util.CheckAndResponseError(err, c) {
 			return
 		}
 

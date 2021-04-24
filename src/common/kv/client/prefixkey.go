@@ -6,7 +6,7 @@ const (
 	PRE_DDL  = "ddl_"
 	PRE_TODO = "todo_"
 	PRE_USER = "user_"
-	PRE_OPT = "opt_"
+	PRE_OPT  = "opt_"
 )
 
 // PrefixKey

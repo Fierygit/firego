@@ -32,10 +32,8 @@ export function TodoList() {
     useEffect(() => {
         setInterval(() => {
             setNow(moment().format("MMMM Do YYYY, H:mm:ss"));
-        }, 1000);
-        setInterval(() => {
             setRemindTodo(checkRemindTodo());
-        }, 5 * 1000);
+        }, 1000);
     }, [setNow]);
 
     const removeTodo = useCallback(async (id) => {

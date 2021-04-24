@@ -7,9 +7,11 @@
 package util
 
 import (
+	"net/http"
 	"os"
 
 	"github.com/bwmarrin/snowflake"
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
 
@@ -21,12 +23,22 @@ func Min(x, y int) int {
 	return y
 }
 
-//CheckError c
+//CheckError CheckErrorc
 func CheckError(err error) {
 	if err != nil {
 		logrus.Info("Fatal error ", err.Error())
 		os.Exit(1)
 	}
+}
+
+func CheckAndResponseError(err error, c *gin.Context) bool {
+	if err != nil {
+		logrus.Error(err)
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+		return true
+	}
+
+	return false
 }
 
 func GetSnowflake() snowflake.ID {

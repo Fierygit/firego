@@ -1,40 +1,58 @@
-@token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJhaXk0eGQwMjlneHMiLCJleHAiOjE2MTk3NjgwNjV9.xgQX_Ra4Y-vgkdgmgIOS3ll36NpjvZ9adbJgoMFYDNE"
+@base_url=http://127.0.0.1:8716
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJhZ2w4cDh4Ymswc2ciLCJleHAiOjE2MTk1MjU5MDV9.2-IusUVLrZqkaZD6jCKLhxNIfkupGb9HwY9hZJMfKlA
 
-POST http://127.0.0.1:8716/todo HTTP/1.1
+###
+POST {{base_url}}/todo HTTP/1.1
 content-type: application/json
+Cookie: token={{token}}  
 
 {
-    "todo": "test2"
+    "todo": "test"
 }
 
 ###
-GET http://127.0.0.1:8716/todo HTTP/1.1
+GET {{base_url}}/todo HTTP/1.1
 content-type: application/json
+Cookie: token={{token}}  
 
 {
 }
 
 ###
-POST  http://127.0.0.1:8716/todo/delete HTTP/1.1
+POST  {{base_url}}/todo/delete HTTP/1.1
 content-type: application/json
+Cookie: token={{token}}  
 
 {
-    "id": "1376220843574562816"
+    "id": "1385897607343116288"
 }
 
 ###
-POST  http://127.0.0.1:8716/todo/finish HTTP/1.1
+POST  {{base_url}}/todo/finish HTTP/1.1
 content-type: application/json
+Cookie: token={{token}}  
 
 {
-    "id": "1376215328933023744",
+    "id": "1385897607343116288",
     "finished": true
 }
 
 ###
-POST  http://127.0.0.1:9527/user/login?redirect=http%3A%2F%2Flocalhost%3A8716%2Ftodo HTTP/1.1
+POST  {{base_url}}/todo/edit HTTP/1.1
 content-type: application/json
+Cookie: token={{token}}  
 
 {
-    "name": "mingor"
+    "id": "1385897607343116288",
+    "Todo": "123"
+}
+
+###
+POST  {{base_url}}/todo/daily HTTP/1.1
+content-type: application/json
+Cookie: token={{token}}  
+
+{
+    "id": "1385897607343116288",
+    "daily": true
 }

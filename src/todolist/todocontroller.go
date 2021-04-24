@@ -1,16 +1,11 @@
 package todolist
 
 import (
-	"encoding/json"
 	"firego/src/common/kv/client"
 	"firego/src/common/util"
-	"fmt"
 	"net/http"
-	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 type TodoController struct {
@@ -24,74 +19,35 @@ func NewTodoController() TodoController {
 
 func getUserId(c *gin.Context) string {
 	user_id := c.GetString("user_id")
-
-	logrus.Info(user_id)
-
 	return user_id
 }
 
 func (ctl *TodoController) AddTodo(c *gin.Context) {
 	type AddTodoReq struct {
-		Content string `form:"content" json:"content" binding:"required"`
-		Daily   bool   `form:"daily" json:"daily" binding:"required"`
+		Todo string `form:"todo" json:"todo" binding:"required"`
 	}
-	user_id := getUserId(c)
-
 	req := &AddTodoReq{}
 	err := c.BindJSON(&req)
-	if err != nil {
-		logrus.Error("bind json failed, err", err)
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+	if util.CheckAndResponseError(err, c) {
 		return
 	}
 
 	id := util.GetSnowflake().String()
-	todo := TodoModel{
-		Id:       id,
-		Content:  req.Content,
-		Finished: false,
-		Daily:    req.Daily,
-	}
-	data, err := json.Marshal(todo)
-	if err != nil {
-		logrus.Error("json.marshal failed, err:", err)
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+	user_id := getUserId(c)
+	todo, err := Addtodo(ctl.DB, user_id, id, req.Todo, false, false)
+	if util.CheckAndResponseError(err, c) {
 		return
 	}
-
-	key := id
-	value := string(data)
-
-	logrus.Info(key, value)
-
-	ctl.DB.Put(user_id, key, value)
 
 	c.JSON(http.StatusOK, todo)
 }
 
 func (ctl *TodoController) GetTodo(c *gin.Context) {
 	user_id := getUserId(c)
-	todos := ctl.DB.BatchGet(user_id)
-
-	todo_list := make([]TodoModel, 0)
-
-	for _, t := range todos {
-		var todo TodoModel
-		err := json.Unmarshal([]byte(t), &todo)
-		if err != nil {
-			logrus.Error("Unmarshal failed, ", err)
-			c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
-			return
-		}
-		todo_list = append(todo_list, todo)
+	todo_list, err := BatchGetTodo(ctl.DB, user_id)
+	if util.CheckAndResponseError(err, c) {
+		return
 	}
-
-	// data, err := json.Marshal(todo_list)
-	// if err != nil {
-	// 	logrus.Error("json.marshal failed, err:", err)
-	// 	c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
-	// 	return
-	// }
 
 	c.JSON(http.StatusOK, todo_list)
 }
@@ -104,22 +60,11 @@ func (ctl *TodoController) RemoveTodo(c *gin.Context) {
 
 	req := &RemoveTodoReq{}
 	err := c.BindJSON(&req)
-	if err != nil {
-		logrus.Error("bind json failed, err", err)
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+	if util.CheckAndResponseError(err, c) {
 		return
 	}
 
-	ctl.DB.Delete(user_id, req.Id)
-
-	// 删除时间  有 批处理  user-id , 新建一张表
-	times := ctl.DB.Get(getTimesKey(user_id), req.Id)
-
-	times_slice := strings.Split(times, ";")
-
-	for _, val := range times_slice {
-		ctl.DB.Delete(getTimesKey(user_id), val)
-	}
+	DeleteTodo(ctl.DB, user_id, req.Id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"msg": "success",
@@ -131,41 +76,27 @@ func (ctl *TodoController) FinishTodo(c *gin.Context) {
 		Id       string `form:"id" json:"id" binding:"required"`
 		Finished bool   `form:"finished" json:"finished" binding:"required"`
 	}
-	user_id := getUserId(c)
-
 	req := &FinishTodoReq{}
 	err := c.BindJSON(&req)
-	if err != nil {
-		logrus.Error("bind json failed, err", err)
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+	if util.CheckAndResponseError(err, c) {
 		return
 	}
 
-	var todo TodoModel
-	payload := ctl.DB.Get(user_id, req.Id)
-
-	err = json.Unmarshal([]byte(payload), &todo)
-	if err != nil {
-		logrus.Error("Unmarshal failed, ", err)
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+	user_id := getUserId(c)
+	oldTodo, err := GetTodo(ctl.DB, user_id, req.Id)
+	if util.CheckAndResponseError(err, c) {
 		return
 	}
 
-	todo.Finished = req.Finished
+	newTodo := oldTodo
+	newTodo.Finished = req.Finished
 
-	var data []byte
-	data, err = json.Marshal(todo)
-	if err != nil {
-		logrus.Error("marshal failed, ", err)
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+	err = UpdateTodo(ctl.DB, user_id, req.Id, newTodo)
+	if util.CheckAndResponseError(err, c) {
 		return
 	}
 
-	logrus.Info(string(data))
-
-	ctl.DB.Put(user_id, req.Id, string(data))
-
-	c.JSON(http.StatusOK, todo)
+	c.JSON(http.StatusOK, newTodo)
 }
 
 func (ctl *TodoController) EditTodo(c *gin.Context) {
@@ -173,51 +104,53 @@ func (ctl *TodoController) EditTodo(c *gin.Context) {
 		Id   string `form:"id" json:"id" binding:"required"`
 		Todo string `form:"todo" json:"todo" binding:"required"`
 	}
-	user_id := getUserId(c)
-
 	req := &EditTodoReq{}
 	err := c.BindJSON(&req)
-	if err != nil {
-		logrus.Error("bind json failed, err", err)
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+	if util.CheckAndResponseError(err, c) {
 		return
 	}
 
-	var todo TodoModel
-	payload := ctl.DB.Get(user_id, req.Id)
-
-	err = json.Unmarshal([]byte(payload), &todo)
-	if err != nil {
-		logrus.Error("Unmarshal failed, ", err)
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+	user_id := getUserId(c)
+	oldTodo, err := GetTodo(ctl.DB, user_id, req.Id)
+	if util.CheckAndResponseError(err, c) {
 		return
 	}
 
-	todo.Content = req.Todo
+	newTodo := oldTodo
+	newTodo.Name = req.Todo
 
-	var data []byte
-	data, err = json.Marshal(todo)
-	if err != nil {
-		logrus.Error("marshal failed, ", err)
-		c.JSON(http.StatusBadRequest, gin.H{"msg": err.Error()})
+	err = UpdateTodo(ctl.DB, user_id, req.Id, newTodo)
+	if util.CheckAndResponseError(err, c) {
 		return
 	}
 
-	logrus.Info(string(data))
-
-	ctl.DB.Put(user_id, req.Id, string(data))
-
-	c.JSON(http.StatusOK, todo)
+	c.JSON(http.StatusOK, newTodo)
 }
 
-func getTodayKey(user_id string) string {
-	return "time-" + user_id + "-" + getTimeStr()
-}
+func (ctl *TodoController) DailyTodo(c *gin.Context) {
+	type DailyTodoReq struct {
+		Id    string `form:"id" json:"id" binding:"required"`
+		Daily bool   `form:"daily" json:"daily" binding:"required"`
+	}
+	req := &DailyTodoReq{}
+	err := c.BindJSON(&req)
+	if util.CheckAndResponseError(err, c) {
+		return
+	}
 
-func getTimesKey(user_id string) string {
-	return "time-" + user_id
-}
+	user_id := getUserId(c)
+	oldTodo, err := GetTodo(ctl.DB, user_id, req.Id)
+	if util.CheckAndResponseError(err, c) {
+		return
+	}
 
-func getTimeStr() string {
-	return fmt.Sprint(time.Now().Year(), "-", time.Now().Month(), "-", time.Now().Day())
+	newTodo := oldTodo
+	newTodo.Daily = req.Daily
+
+	err = UpdateTodo(ctl.DB, user_id, req.Id, newTodo)
+	if util.CheckAndResponseError(err, c) {
+		return
+	}
+
+	c.JSON(http.StatusOK, newTodo)
 }

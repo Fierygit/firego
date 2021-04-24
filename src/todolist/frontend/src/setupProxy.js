@@ -10,7 +10,8 @@ module.exports = (app) => {
   app.use(
     "/todo",
     createProxyMiddleware({
-      target: "https://todo.firego.cn",
+      // target: "https://todo.firego.cn",
+      target: "http://localhost:8716",
       changeOrigin: true,
       headers: {
         cookie:

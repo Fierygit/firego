@@ -153,6 +153,10 @@ func (crud *TodoDailyCRUD) Get(user_id, todo_id string) TodoDailyModel {
 	payload := crud.db.Get(user_id, todo_id)
 	msgpack.Unmarshal([]byte(payload), &todo_daily) // no need to check error
 
+    if todo_daily.Records == nil {
+        todo_daily.Records = []string{}
+    }
+
 	return todo_daily
 }
 

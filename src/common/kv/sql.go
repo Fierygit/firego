@@ -7,7 +7,6 @@
 package kv
 
 import (
-	"encoding/json"
 	"firego/src/common/kv/client"
 	"firego/src/common/util"
 	"firego/src/todolist"
@@ -16,7 +15,6 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
-	"github.com/vmihailenco/msgpack"
 )
 
 //TestClient test
@@ -38,46 +36,46 @@ func TestClient(what, user_id string) {
 }
 
 func json2msg() {
-	user_db := client.NewConnector().SetSize(2).Connect(client.PRE_USER, "123456")
-	todo_db := client.NewConnector().SetSize(2).Connect(client.PRE_TODO, "123456")
+	// user_db := client.NewConnector().SetSize(2).Connect(client.PRE_USER, "123456")
+	// todo_db := client.NewConnector().SetSize(2).Connect(client.PRE_TODO, "123456")
 
-	users_payload := user_db.BatchGet("user")
-	for i, u_payload := range users_payload {
-		var u user.UserModel
-		err := json.Unmarshal([]byte(u_payload), &u)
-		if err != nil {
-			logrus.Warn(err)
-			return
-		}
+	// users_payload := user_db.BatchGet("user")
+	// for i, u_payload := range users_payload {
+	// 	var u user.UserModel
+	// 	err := json.Unmarshal([]byte(u_payload), &u)
+	// 	if err != nil {
+	// 		logrus.Warn(err)
+	// 		return
+	// 	}
 
-		msg_payload, err := msgpack.Marshal(u)
-		if err != nil {
-			logrus.Warn(err)
-			return
-		}
-		logrus.Info(i, u)
+	// 	msg_payload, err := msgpack.Marshal(u)
+	// 	if err != nil {
+	// 		logrus.Warn(err)
+	// 		return
+	// 	}
+	// 	logrus.Info(i, u)
 
-		user_db.Put("user", u.Name, string(msg_payload))
+	// 	user_db.Put("user", u.Name, string(msg_payload))
 
-		todos_payload := todo_db.BatchGet(u.Uid)
-		for i, t_payload := range todos_payload {
-			var t todolist.TodoModel
-			err := json.Unmarshal([]byte(t_payload), &t)
-			if err != nil {
-				logrus.Warn(err)
-				return
-			}
+	// 	todos_payload := todo_db.BatchGet(u.Uid)
+	// 	for i, t_payload := range todos_payload {
+	// 		var t todolist.TodoModel
+	// 		err := json.Unmarshal([]byte(t_payload), &t)
+	// 		if err != nil {
+	// 			logrus.Warn(err)
+	// 			return
+	// 		}
 
-			msg_payload, err := msgpack.Marshal(t)
-			if err != nil {
-				logrus.Warn(err)
-				return
-			}
-			logrus.Info(i, t)
+	// 		msg_payload, err := msgpack.Marshal(t)
+	// 		if err != nil {
+	// 			logrus.Warn(err)
+	// 			return
+	// 		}
+	// 		logrus.Info(i, t)
 
-			todo_db.Put(u.Uid, t.Id, string(msg_payload))
-		}
-	}
+	// 		todo_db.Put(u.Uid, t.Id, string(msg_payload))
+	// 	}
+	// }
 }
 
 func testDB() {
@@ -101,8 +99,8 @@ func testDB() {
 }
 
 func getAllUser() {
-	leveldb := client.NewConnector().SetSize(2).Connect(client.PRE_USER, "123456")
-	user_list, _ := user.BatchGetUser(leveldb)
+	user_crud := user.NewUserCRUD()
+	user_list, _ := user_crud.BatchGetUser()
 
 	for i, u := range user_list {
 		logrus.Info(i, u)
@@ -110,9 +108,9 @@ func getAllUser() {
 }
 
 func getAllTodo(user_id string) {
-	leveldb := client.NewConnector().SetSize(2).Connect(client.PRE_TODO, "123456")
+	todo_crud := todolist.NewTodoCRUD()
 
-	todo_list, _ := todolist.BatchGetTodo(leveldb, user_id)
+	todo_list, _ := todo_crud.BatchGetTodo(user_id)
 
 	for i, todo := range todo_list {
 		logrus.Info(i, todo)

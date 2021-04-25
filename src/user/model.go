@@ -16,7 +16,16 @@ type UserModel struct {
 }
 
 ///////////////// UserModel ////////////////////
-func AddUser(db client.Leveldb, user_id, name string) (UserModel, error) {
+type UserCRUD struct {
+	db client.Leveldb
+}
+
+func NewUserCRUD() UserCRUD {
+	db := client.NewConnector().SetSize(2).Connect(client.PRE_USER, "123456")
+	return UserCRUD{db: db}
+}
+
+func (user_crud *UserCRUD) AddUser(user_id, name string) (UserModel, error) {
 	user := UserModel{
 		Uid:  user_id,
 		Name: name,
@@ -27,14 +36,14 @@ func AddUser(db client.Leveldb, user_id, name string) (UserModel, error) {
 	}
 	key := name
 	value := string(data)
-	db.Put(kv_user_key, key, value)
+	user_crud.db.Put(kv_user_key, key, value)
 
 	return user, nil
 }
 
-func GetUser(db client.Leveldb, username string) (UserModel, error) {
+func (user_crud *UserCRUD) GetUser(username string) (UserModel, error) {
 	user := UserModel{}
-	payload := db.Get(kv_user_key, username)
+	payload := user_crud.db.Get(kv_user_key, username)
 
 	err := msgpack.Unmarshal([]byte(payload), &user)
 	if err != nil {
@@ -44,8 +53,8 @@ func GetUser(db client.Leveldb, username string) (UserModel, error) {
 	return user, nil
 }
 
-func BatchGetUser(db client.Leveldb) ([]UserModel, error) {
-	users := db.BatchGet(kv_user_key)
+func (user_crud *UserCRUD) BatchGetUser() ([]UserModel, error) {
+	users := user_crud.db.BatchGet(kv_user_key)
 
 	user_list := make([]UserModel, 0)
 
@@ -61,8 +70,8 @@ func BatchGetUser(db client.Leveldb) ([]UserModel, error) {
 	return user_list, nil
 }
 
-func HasUser(db client.Leveldb, username string) bool {
-	return db.Has(kv_user_key, username)
+func (user_crud *UserCRUD) HasUser(username string) bool {
+	return user_crud.db.Has(kv_user_key, username)
 }
 
 ///////////////// UserModel ////////////////////

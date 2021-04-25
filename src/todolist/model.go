@@ -2,7 +2,6 @@ package todolist
 
 import (
 	"firego/src/common/kv/client"
-	"time"
 
 	"github.com/vmihailenco/msgpack"
 )
@@ -20,14 +19,23 @@ type TodoModel struct {
 	Daily    bool
 }
 
-type TodoRecordModel struct {
+type TodoDailyModel struct {
 	Id      string
-	Records []time.Time
+	Records []string // etc. 2021-04-25
 }
 
 ///////////////// TodoModel ////////////////////
 
-func Addtodo(db client.Leveldb, user_id, todo_id, name string, finished, daily bool) (TodoModel, error) {
+type TodoCRUD struct {
+	db client.Leveldb
+}
+
+func NewTodoCRUD() TodoCRUD {
+	db := client.NewConnector().SetSize(2).Connect(client.PRE_TODO, "123456")
+	return TodoCRUD{db: db}
+}
+
+func (crud *TodoCRUD) AddTodo(user_id, todo_id, name string, finished, daily bool) (TodoModel, error) {
 	todo := TodoModel{
 		Id:       todo_id,
 		Name:     name,
@@ -40,32 +48,30 @@ func Addtodo(db client.Leveldb, user_id, todo_id, name string, finished, daily b
 		return TodoModel{}, err
 	}
 
-	db.Put(user_id, todo_id, string(data))
+	crud.db.Put(user_id, todo_id, string(data))
 
 	return todo, nil
 }
 
-func DeleteTodo(db client.Leveldb, user_id, todo_id string) {
-	db.Delete(user_id, todo_id)
-
-	//TODO 删除时间  有 批处理  user-id , 新建一张表
+func (crud *TodoCRUD) DeleteTodo(user_id, todo_id string) {
+	crud.db.Delete(user_id, todo_id)
 }
 
-func UpdateTodo(db client.Leveldb, user_id, todo_id string, newTodo TodoModel) error {
+func (crud *TodoCRUD) UpdateTodo(user_id, todo_id string, newTodo TodoModel) error {
 	var data []byte
 	data, err := msgpack.Marshal(newTodo)
 	if err != nil {
 		return err
 	}
 
-	db.Put(user_id, todo_id, string(data))
+	crud.db.Put(user_id, todo_id, string(data))
 
 	return nil
 }
 
-func GetTodo(db client.Leveldb, user_id, todo_id string) (TodoModel, error) {
+func (crud *TodoCRUD) GetTodo(user_id, todo_id string) (TodoModel, error) {
 	var todo TodoModel
-	payload := db.Get(user_id, todo_id)
+	payload := crud.db.Get(user_id, todo_id)
 
 	err := msgpack.Unmarshal([]byte(payload), &todo)
 	if err != nil {
@@ -75,8 +81,25 @@ func GetTodo(db client.Leveldb, user_id, todo_id string) (TodoModel, error) {
 	return todo, nil
 }
 
-func BatchGetTodo(db client.Leveldb, user_id string) ([]TodoModel, error) {
-	todos := db.BatchGet(user_id)
+func (crud *TodoCRUD) BatchGetTodo(user_id string) ([]TodoModel, error) {
+	todos := crud.db.BatchGet(user_id)
+
+	todo_list := make([]TodoModel, 0)
+
+	for _, t := range todos {
+		var todo TodoModel
+		err := msgpack.Unmarshal([]byte(t), &todo)
+		if err != nil {
+			return todo_list, err
+		}
+		todo_list = append(todo_list, todo)
+	}
+
+	return todo_list, nil
+}
+
+func (crud *TodoCRUD) BatchGetAllTodo() ([]TodoModel, error) {
+	todos := crud.db.BatchGetAll()
 
 	todo_list := make([]TodoModel, 0)
 
@@ -93,3 +116,44 @@ func BatchGetTodo(db client.Leveldb, user_id string) ([]TodoModel, error) {
 }
 
 ///////////////// TodoModel ////////////////////
+
+///////////////// TodoDailyModel ////////////////////
+type TodoDailyCRUD struct {
+	db client.Leveldb
+}
+
+func NewTodoDailyCRUD() TodoDailyCRUD {
+	db := client.NewConnector().SetSize(2).Connect(client.PRE_TODO_DAILY, "123456")
+	return TodoDailyCRUD{db: db}
+}
+
+func (crud *TodoDailyCRUD) AddTodoDaily(user_id, todo_id string, records []string) (TodoDailyModel, error) {
+	todo_daily := TodoDailyModel{Id: todo_id, Records: records}
+	data, err := msgpack.Marshal(todo_daily)
+	if err != nil {
+		return todo_daily, err
+	}
+
+	crud.db.Put(user_id, todo_id, string(data))
+
+	return todo_daily, nil
+}
+
+func (crud *TodoDailyCRUD) DeleteTodoDaily(user_id, todo_id string) {
+	crud.db.Delete(user_id, todo_id)
+}
+
+func (crud *TodoDailyCRUD) HasTodoDaily(user_id, todo_id string) bool {
+	return crud.db.Has(user_id, todo_id)
+}
+
+func (crud *TodoDailyCRUD) GetTodoDaily(user_id, todo_id string) TodoDailyModel {
+	var todo_daily TodoDailyModel
+
+	payload := crud.db.Get(user_id, todo_id)
+	msgpack.Unmarshal([]byte(payload), &todo_daily) // no need to check error
+
+	return todo_daily
+}
+
+///////////////// TodoDailyModel ////////////////////

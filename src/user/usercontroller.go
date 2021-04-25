@@ -1,7 +1,6 @@
 package user
 
 import (
-	"firego/src/common/kv/client"
 	mid "firego/src/common/middleware"
 	"firego/src/common/util"
 	"net/http"
@@ -13,12 +12,11 @@ import (
 )
 
 type UserController struct {
-	DB client.Leveldb
+	user_crud UserCRUD
 }
 
 func NewUserController() UserController {
-	db := client.NewConnector().SetSize(2).Connect(client.PRE_USER, "123456")
-	return UserController{DB: db}
+	return UserController{user_crud: NewUserCRUD()}
 }
 
 const (
@@ -62,21 +60,21 @@ func (ctl *UserController) Login(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"msg": "name can not be empty"})
 	}
 
-	hasBeen := HasUser(ctl.DB, req.Name)
+	hasBeen := ctl.user_crud.HasUser(req.Name)
 	uid := ""
 
 	// 用户不存在
 	if !hasBeen {
 		// 添加新用户
 		uid = util.GetSnowflake().Base36()
-		user, err := AddUser(ctl.DB, uid, req.Name)
+		user, err := ctl.user_crud.AddUser(uid, req.Name)
 		if util.CheckAndResponseError(err, c) {
 			return
 		}
 
 		logrus.Info("make a new user ", user.Name)
 	} else { // 用户已存在
-		user, err := GetUser(ctl.DB, req.Name)
+		user, err := ctl.user_crud.GetUser(req.Name)
 		if util.CheckAndResponseError(err, c) {
 			return
 		}

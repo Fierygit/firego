@@ -8,16 +8,19 @@ package todolist
 
 import (
 	mid "firego/src/common/middleware"
-	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/robfig/cron/v3"
 )
 
 // Run port: ":8716"
 func Run(port string) {
+	c := cron.New()
+	c.AddFunc("30 0 * * *", CheckDailyTodo) // every day 12:30.am
+	c.Start()
+
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
-	time.Now()
 
 	todo_controller := NewTodoController()
 
@@ -28,7 +31,9 @@ func Run(port string) {
 	r.POST("/todo/delete", todo_controller.RemoveTodo)
 	r.POST("/todo/finish", todo_controller.FinishTodo)
 	r.POST("/todo/edit", todo_controller.EditTodo)
-	r.POST("/todo/daily", todo_controller.DailyTodo)
+
+	r.GET("/todo/daily", todo_controller.GetDailyTodo)
+	r.POST("/todo/daily", todo_controller.PutDailyTodo)
 
 	r.Run(port)
 }

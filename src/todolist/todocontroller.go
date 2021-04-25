@@ -1,7 +1,6 @@
 package todolist
 
 import (
-	"firego/src/common/kv/client"
 	"firego/src/common/util"
 	"net/http"
 
@@ -9,12 +8,15 @@ import (
 )
 
 type TodoController struct {
-	DB client.Leveldb
+	todo_crud       TodoCRUD
+	todo_daily_crud TodoDailyCRUD
 }
 
 func NewTodoController() TodoController {
-	db := client.NewConnector().SetSize(2).Connect(client.PRE_TODO, "123456")
-	return TodoController{DB: db}
+	return TodoController{
+		todo_crud:       NewTodoCRUD(),
+		todo_daily_crud: NewTodoDailyCRUD(),
+	}
 }
 
 func getUserId(c *gin.Context) string {
@@ -34,7 +36,7 @@ func (ctl *TodoController) AddTodo(c *gin.Context) {
 
 	id := util.GetSnowflake().String()
 	user_id := getUserId(c)
-	todo, err := Addtodo(ctl.DB, user_id, id, req.Todo, false, false)
+	todo, err := ctl.todo_crud.AddTodo(user_id, id, req.Todo, false, false)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -44,7 +46,7 @@ func (ctl *TodoController) AddTodo(c *gin.Context) {
 
 func (ctl *TodoController) GetTodo(c *gin.Context) {
 	user_id := getUserId(c)
-	todo_list, err := BatchGetTodo(ctl.DB, user_id)
+	todo_list, err := ctl.todo_crud.BatchGetTodo(user_id)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -64,7 +66,9 @@ func (ctl *TodoController) RemoveTodo(c *gin.Context) {
 		return
 	}
 
-	DeleteTodo(ctl.DB, user_id, req.Id)
+	// 顺便删除 todo daily
+	ctl.todo_crud.DeleteTodo(user_id, req.Id)
+	ctl.todo_daily_crud.DeleteTodoDaily(user_id, req.Id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"msg": "success",
@@ -83,7 +87,7 @@ func (ctl *TodoController) FinishTodo(c *gin.Context) {
 	}
 
 	user_id := getUserId(c)
-	oldTodo, err := GetTodo(ctl.DB, user_id, req.Id)
+	oldTodo, err := ctl.todo_crud.GetTodo(user_id, req.Id)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -91,7 +95,7 @@ func (ctl *TodoController) FinishTodo(c *gin.Context) {
 	newTodo := oldTodo
 	newTodo.Finished = req.Finished
 
-	err = UpdateTodo(ctl.DB, user_id, req.Id, newTodo)
+	err = ctl.todo_crud.UpdateTodo(user_id, req.Id, newTodo)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -111,7 +115,7 @@ func (ctl *TodoController) EditTodo(c *gin.Context) {
 	}
 
 	user_id := getUserId(c)
-	oldTodo, err := GetTodo(ctl.DB, user_id, req.Id)
+	oldTodo, err := ctl.todo_crud.GetTodo(user_id, req.Id)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -119,7 +123,7 @@ func (ctl *TodoController) EditTodo(c *gin.Context) {
 	newTodo := oldTodo
 	newTodo.Name = req.Todo
 
-	err = UpdateTodo(ctl.DB, user_id, req.Id, newTodo)
+	err = ctl.todo_crud.UpdateTodo(user_id, req.Id, newTodo)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -127,7 +131,32 @@ func (ctl *TodoController) EditTodo(c *gin.Context) {
 	c.JSON(http.StatusOK, newTodo)
 }
 
-func (ctl *TodoController) DailyTodo(c *gin.Context) {
+func (ctl *TodoController) GetDailyTodo(c *gin.Context) {
+	type DailyTodoReq struct {
+		Id string `form:"id" json:"id" binding:"required"`
+	}
+	req := &DailyTodoReq{}
+	err := c.BindJSON(&req)
+	if util.CheckAndResponseError(err, c) {
+		return
+	}
+
+	user_id := getUserId(c)
+
+	todo_daily := ctl.todo_daily_crud.GetTodoDaily(user_id, req.Id)
+	todo, err := ctl.todo_crud.GetTodo(user_id, req.Id)
+	if util.CheckAndResponseError(err, c) {
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"Id":      todo.Id,
+		"todo":    todo.Name,
+		"records": todo_daily.Records,
+	})
+}
+
+func (ctl *TodoController) PutDailyTodo(c *gin.Context) {
 	type DailyTodoReq struct {
 		Id    string `form:"id" json:"id" binding:"required"`
 		Daily bool   `form:"daily" json:"daily" binding:"required"`
@@ -139,7 +168,7 @@ func (ctl *TodoController) DailyTodo(c *gin.Context) {
 	}
 
 	user_id := getUserId(c)
-	oldTodo, err := GetTodo(ctl.DB, user_id, req.Id)
+	oldTodo, err := ctl.todo_crud.GetTodo(user_id, req.Id)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -147,7 +176,7 @@ func (ctl *TodoController) DailyTodo(c *gin.Context) {
 	newTodo := oldTodo
 	newTodo.Daily = req.Daily
 
-	err = UpdateTodo(ctl.DB, user_id, req.Id, newTodo)
+	err = ctl.todo_crud.UpdateTodo(user_id, req.Id, newTodo)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}

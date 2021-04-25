@@ -30,10 +30,12 @@ export function TodoList() {
     }, [getTodolist]);
 
     useEffect(() => {
-        setInterval(() => {
+        let timer = setInterval(() => {
             setNow(moment().format("MMMM Do YYYY, H:mm:ss"));
             setRemindTodo(checkRemindTodo());
         }, 1000);
+
+        return () => { clearInterval(timer) };
     }, [setNow]);
 
     const removeTodo = useCallback(async (id) => {
@@ -45,9 +47,9 @@ export function TodoList() {
 
     const filteredTodoList = todoList.filter((todo) => {
         if (showFinished) {
-            return todo.Finished && isBefore1day(todo.Id);
+            return !todo.Daily && todo.Finished && isBefore1day(todo.Id);
         }
-        return !todo.Finished || (todo.Finished && !isBefore1day(todo.Id));
+        return todo.Daily || !todo.Finished || (todo.Finished && !isBefore1day(todo.Id));
     });
     if (showFinished) filteredTodoList.reverse();
 

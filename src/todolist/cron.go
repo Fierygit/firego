@@ -23,7 +23,7 @@ func CheckDailyTodo() {
 	logrus.Info(yesterday_format)
 
 	logrus.Info("------------------- check daily todo start ------------------")
-	users_list, err := user_crud.BatchGetUser()
+	users_list, err := user_crud.BatchGet()
 	if err != nil {
 		logrus.Error(err)
 		return
@@ -31,7 +31,7 @@ func CheckDailyTodo() {
 
 	for _, u := range users_list {
 
-		todos_list, err := todo_crud.BatchGetTodo(u.Uid)
+		todos_list, err := todo_crud.BatchGet(u.Uid)
 		if err != nil {
 			logrus.Error(err)
 			return
@@ -41,15 +41,15 @@ func CheckDailyTodo() {
 			if todo.Daily && todo.Finished {
 				// reset finish flag
 				todo.Finished = false
-				err := todo_crud.UpdateTodo(u.Uid, todo.Id, todo)
+				err := todo_crud.Update(u.Uid, todo.Id, todo)
 				if err != nil {
 					logrus.Error(err)
 				}
 
 				// add record
-				todo_daily := todo_daily_crud.GetTodoDaily(u.Uid, todo.Id)
+				todo_daily := todo_daily_crud.Get(u.Uid, todo.Id)
 				new_records := append(todo_daily.Records, yesterday_format)
-				todo_daily_crud.AddTodoDaily(u.Uid, todo.Id, new_records)
+				todo_daily_crud.Add(u.Uid, todo.Id, new_records)
 			}
 		}
 

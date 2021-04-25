@@ -25,7 +25,7 @@ func NewUserCRUD() UserCRUD {
 	return UserCRUD{db: db}
 }
 
-func (user_crud *UserCRUD) AddUser(user_id, name string) (UserModel, error) {
+func (user_crud *UserCRUD) Add(user_id, name string) (UserModel, error) {
 	user := UserModel{
 		Uid:  user_id,
 		Name: name,
@@ -41,7 +41,7 @@ func (user_crud *UserCRUD) AddUser(user_id, name string) (UserModel, error) {
 	return user, nil
 }
 
-func (user_crud *UserCRUD) GetUser(username string) (UserModel, error) {
+func (user_crud *UserCRUD) Get(username string) (UserModel, error) {
 	user := UserModel{}
 	payload := user_crud.db.Get(kv_user_key, username)
 
@@ -53,7 +53,7 @@ func (user_crud *UserCRUD) GetUser(username string) (UserModel, error) {
 	return user, nil
 }
 
-func (user_crud *UserCRUD) BatchGetUser() ([]UserModel, error) {
+func (user_crud *UserCRUD) BatchGet() ([]UserModel, error) {
 	users := user_crud.db.BatchGet(kv_user_key)
 
 	user_list := make([]UserModel, 0)
@@ -70,7 +70,7 @@ func (user_crud *UserCRUD) BatchGetUser() ([]UserModel, error) {
 	return user_list, nil
 }
 
-func (user_crud *UserCRUD) HasUser(username string) bool {
+func (user_crud *UserCRUD) Has(username string) bool {
 	return user_crud.db.Has(kv_user_key, username)
 }
 

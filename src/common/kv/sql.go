@@ -100,7 +100,7 @@ func testDB() {
 
 func getAllUser() {
 	user_crud := user.NewUserCRUD()
-	user_list, _ := user_crud.BatchGetUser()
+	user_list, _ := user_crud.BatchGet()
 
 	for i, u := range user_list {
 		logrus.Info(i, u)
@@ -110,7 +110,7 @@ func getAllUser() {
 func getAllTodo(user_id string) {
 	todo_crud := todolist.NewTodoCRUD()
 
-	todo_list, _ := todo_crud.BatchGetTodo(user_id)
+	todo_list, _ := todo_crud.BatchGet(user_id)
 
 	for i, todo := range todo_list {
 		logrus.Info(i, todo)

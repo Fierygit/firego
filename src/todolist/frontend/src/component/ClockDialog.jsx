@@ -49,7 +49,7 @@ function Modal({ visible, confirm, cancel }) {
                 <div className='flex items-center z-20 justify-center py-6 w-11/12 md:w-2/3 lg:w-1/2 flex-col bg-gray-100 dark:bg-gray-800 rounded-xl' onClick={e => e.stopPropagation()}>
                     <div className='w-full flex items-center justify-center mb-5'>
                         <div>
-                            <label htmlFor="time" className="block text-base font-medium text-black dark:text-white select-none">remind me later⏰:</label>
+                            <label htmlFor="time" className="block text-base font-medium text-black dark:text-white select-none">⏰ remind me later:</label>
                             <div className="mt-1 relative rounded-md shadow-sm">
                                 <input
                                     ref={timeRef}
@@ -109,7 +109,7 @@ export function ClockDialog({ todo }) {
     return (
         <Fragment>
             <Modal visible={visible} confirm={confirm} cancel={cancel} />
-            <button title='clock' className='absolute hidden lg:group-hover:block transform right-14 md:right-20 w-8 md:w-10 h-4/5 hover:scale-125 select-none focus:outline-none' onClick={() => setVisible(!visible)}>
+            <button title='clock' className='hidden lg:group-hover:block transform w-8 md:w-10 h-4/5 hover:scale-125 select-none focus:outline-none' onClick={() => setVisible(!visible)}>
                 <svg className='w-full h-full fill-current' viewBox="0 0 500 500"><g>
                     <g>
                         <path d="M256.001,77.017c-107.656,0-195.244,87.589-195.244,195.244c0,107.662,87.589,195.25,195.244,195.25

@@ -35,7 +35,7 @@ func NewTodoCRUD() TodoCRUD {
 	return TodoCRUD{db: db}
 }
 
-func (crud *TodoCRUD) AddTodo(user_id, todo_id, name string, finished, daily bool) (TodoModel, error) {
+func (crud *TodoCRUD) Add(user_id, todo_id, name string, finished, daily bool) (TodoModel, error) {
 	todo := TodoModel{
 		Id:       todo_id,
 		Name:     name,
@@ -53,11 +53,11 @@ func (crud *TodoCRUD) AddTodo(user_id, todo_id, name string, finished, daily boo
 	return todo, nil
 }
 
-func (crud *TodoCRUD) DeleteTodo(user_id, todo_id string) {
+func (crud *TodoCRUD) Delete(user_id, todo_id string) {
 	crud.db.Delete(user_id, todo_id)
 }
 
-func (crud *TodoCRUD) UpdateTodo(user_id, todo_id string, newTodo TodoModel) error {
+func (crud *TodoCRUD) Update(user_id, todo_id string, newTodo TodoModel) error {
 	var data []byte
 	data, err := msgpack.Marshal(newTodo)
 	if err != nil {
@@ -69,7 +69,7 @@ func (crud *TodoCRUD) UpdateTodo(user_id, todo_id string, newTodo TodoModel) err
 	return nil
 }
 
-func (crud *TodoCRUD) GetTodo(user_id, todo_id string) (TodoModel, error) {
+func (crud *TodoCRUD) Get(user_id, todo_id string) (TodoModel, error) {
 	var todo TodoModel
 	payload := crud.db.Get(user_id, todo_id)
 
@@ -81,7 +81,7 @@ func (crud *TodoCRUD) GetTodo(user_id, todo_id string) (TodoModel, error) {
 	return todo, nil
 }
 
-func (crud *TodoCRUD) BatchGetTodo(user_id string) ([]TodoModel, error) {
+func (crud *TodoCRUD) BatchGet(user_id string) ([]TodoModel, error) {
 	todos := crud.db.BatchGet(user_id)
 
 	todo_list := make([]TodoModel, 0)
@@ -98,7 +98,7 @@ func (crud *TodoCRUD) BatchGetTodo(user_id string) ([]TodoModel, error) {
 	return todo_list, nil
 }
 
-func (crud *TodoCRUD) BatchGetAllTodo() ([]TodoModel, error) {
+func (crud *TodoCRUD) BatchGetAll() ([]TodoModel, error) {
 	todos := crud.db.BatchGetAll()
 
 	todo_list := make([]TodoModel, 0)
@@ -127,7 +127,7 @@ func NewTodoDailyCRUD() TodoDailyCRUD {
 	return TodoDailyCRUD{db: db}
 }
 
-func (crud *TodoDailyCRUD) AddTodoDaily(user_id, todo_id string, records []string) (TodoDailyModel, error) {
+func (crud *TodoDailyCRUD) Add(user_id, todo_id string, records []string) (TodoDailyModel, error) {
 	todo_daily := TodoDailyModel{Id: todo_id, Records: records}
 	data, err := msgpack.Marshal(todo_daily)
 	if err != nil {
@@ -139,15 +139,15 @@ func (crud *TodoDailyCRUD) AddTodoDaily(user_id, todo_id string, records []strin
 	return todo_daily, nil
 }
 
-func (crud *TodoDailyCRUD) DeleteTodoDaily(user_id, todo_id string) {
+func (crud *TodoDailyCRUD) Delete(user_id, todo_id string) {
 	crud.db.Delete(user_id, todo_id)
 }
 
-func (crud *TodoDailyCRUD) HasTodoDaily(user_id, todo_id string) bool {
+func (crud *TodoDailyCRUD) Has(user_id, todo_id string) bool {
 	return crud.db.Has(user_id, todo_id)
 }
 
-func (crud *TodoDailyCRUD) GetTodoDaily(user_id, todo_id string) TodoDailyModel {
+func (crud *TodoDailyCRUD) Get(user_id, todo_id string) TodoDailyModel {
 	var todo_daily TodoDailyModel
 
 	payload := crud.db.Get(user_id, todo_id)

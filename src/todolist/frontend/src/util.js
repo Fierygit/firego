@@ -85,3 +85,16 @@ export function checkRemindTodo() {
 
     return remindTodos.todos;
 }
+
+export function getTodayFormat() {
+    let date = new Date();
+    let year = date.getUTCFullYear();
+    let month = date.getUTCMonth() + 1;
+    let day = date.getUTCDate();
+
+    if (year < 10) year = '0' + year;
+    if (month < 10) month = '0' + month;
+    if (day < 10) day = '0' + day;
+
+    return `${year}-${month}-${day}`
+}

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body::-webkit-scrollbar {
-  width: 10px; 
+  width: 10px;
 }
 
 body::-webkit-scrollbar-track {
@@ -11,7 +11,7 @@ body::-webkit-scrollbar-track {
 }
 
 body::-webkit-scrollbar-thumb {
-  background: #FFF;
+  background: #fff;
 }
 
 .dark body::-webkit-scrollbar-thumb {
@@ -46,4 +46,9 @@ body::-webkit-scrollbar-thumb {
 
 .pan_y {
   animation: pan_y 0.7s cubic-bezier(0.1, 0.87, 0.78, 1.35) 1;
+}
+
+.yellow-highlight {
+  text-shadow: -3px 0px 3px yellow, 3px 0px 3px yellow, 6px 0px 6px yellow,
+    -6px 0px 6px yellow;
 }

@@ -60,21 +60,21 @@ func (ctl *UserController) Login(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"msg": "name can not be empty"})
 	}
 
-	hasBeen := ctl.user_crud.HasUser(req.Name)
+	hasBeen := ctl.user_crud.Has(req.Name)
 	uid := ""
 
 	// 用户不存在
 	if !hasBeen {
 		// 添加新用户
 		uid = util.GetSnowflake().Base36()
-		user, err := ctl.user_crud.AddUser(uid, req.Name)
+		user, err := ctl.user_crud.Add(uid, req.Name)
 		if util.CheckAndResponseError(err, c) {
 			return
 		}
 
 		logrus.Info("make a new user ", user.Name)
 	} else { // 用户已存在
-		user, err := ctl.user_crud.GetUser(req.Name)
+		user, err := ctl.user_crud.Get(req.Name)
 		if util.CheckAndResponseError(err, c) {
 			return
 		}

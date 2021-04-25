@@ -36,7 +36,7 @@ func (ctl *TodoController) AddTodo(c *gin.Context) {
 
 	id := util.GetSnowflake().String()
 	user_id := getUserId(c)
-	todo, err := ctl.todo_crud.AddTodo(user_id, id, req.Todo, false, false)
+	todo, err := ctl.todo_crud.Add(user_id, id, req.Todo, false, false)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -46,7 +46,7 @@ func (ctl *TodoController) AddTodo(c *gin.Context) {
 
 func (ctl *TodoController) GetTodo(c *gin.Context) {
 	user_id := getUserId(c)
-	todo_list, err := ctl.todo_crud.BatchGetTodo(user_id)
+	todo_list, err := ctl.todo_crud.BatchGet(user_id)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -67,8 +67,8 @@ func (ctl *TodoController) RemoveTodo(c *gin.Context) {
 	}
 
 	// 顺便删除 todo daily
-	ctl.todo_crud.DeleteTodo(user_id, req.Id)
-	ctl.todo_daily_crud.DeleteTodoDaily(user_id, req.Id)
+	ctl.todo_crud.Delete(user_id, req.Id)
+	ctl.todo_daily_crud.Delete(user_id, req.Id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"msg": "success",
@@ -87,7 +87,7 @@ func (ctl *TodoController) FinishTodo(c *gin.Context) {
 	}
 
 	user_id := getUserId(c)
-	oldTodo, err := ctl.todo_crud.GetTodo(user_id, req.Id)
+	oldTodo, err := ctl.todo_crud.Get(user_id, req.Id)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -95,7 +95,7 @@ func (ctl *TodoController) FinishTodo(c *gin.Context) {
 	newTodo := oldTodo
 	newTodo.Finished = req.Finished
 
-	err = ctl.todo_crud.UpdateTodo(user_id, req.Id, newTodo)
+	err = ctl.todo_crud.Update(user_id, req.Id, newTodo)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -115,7 +115,7 @@ func (ctl *TodoController) EditTodo(c *gin.Context) {
 	}
 
 	user_id := getUserId(c)
-	oldTodo, err := ctl.todo_crud.GetTodo(user_id, req.Id)
+	oldTodo, err := ctl.todo_crud.Get(user_id, req.Id)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -123,7 +123,7 @@ func (ctl *TodoController) EditTodo(c *gin.Context) {
 	newTodo := oldTodo
 	newTodo.Name = req.Todo
 
-	err = ctl.todo_crud.UpdateTodo(user_id, req.Id, newTodo)
+	err = ctl.todo_crud.Update(user_id, req.Id, newTodo)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -132,19 +132,12 @@ func (ctl *TodoController) EditTodo(c *gin.Context) {
 }
 
 func (ctl *TodoController) GetDailyTodo(c *gin.Context) {
-	type DailyTodoReq struct {
-		Id string `form:"id" json:"id" binding:"required"`
-	}
-	req := &DailyTodoReq{}
-	err := c.BindJSON(&req)
-	if util.CheckAndResponseError(err, c) {
-		return
-	}
+	todo_id := c.Param("id")
 
 	user_id := getUserId(c)
 
-	todo_daily := ctl.todo_daily_crud.GetTodoDaily(user_id, req.Id)
-	todo, err := ctl.todo_crud.GetTodo(user_id, req.Id)
+	todo_daily := ctl.todo_daily_crud.Get(user_id, todo_id)
+	todo, err := ctl.todo_crud.Get(user_id, todo_id)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -168,7 +161,7 @@ func (ctl *TodoController) PutDailyTodo(c *gin.Context) {
 	}
 
 	user_id := getUserId(c)
-	oldTodo, err := ctl.todo_crud.GetTodo(user_id, req.Id)
+	oldTodo, err := ctl.todo_crud.Get(user_id, req.Id)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
@@ -176,7 +169,7 @@ func (ctl *TodoController) PutDailyTodo(c *gin.Context) {
 	newTodo := oldTodo
 	newTodo.Daily = req.Daily
 
-	err = ctl.todo_crud.UpdateTodo(user_id, req.Id, newTodo)
+	err = ctl.todo_crud.Update(user_id, req.Id, newTodo)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}

@@ -16,7 +16,7 @@ import (
 // Run port: ":8716"
 func Run(port string) {
 	c := cron.New()
-	c.AddFunc("30 0 * * *", CheckDailyTodo) // every day 12:30.am
+	c.AddFunc("30 0 * * *", CheckDailyTodo) // every day 00:30.am
 	c.Start()
 
 	gin.SetMode(gin.ReleaseMode)
@@ -32,7 +32,7 @@ func Run(port string) {
 	r.POST("/todo/finish", todo_controller.FinishTodo)
 	r.POST("/todo/edit", todo_controller.EditTodo)
 
-	r.GET("/todo/daily", todo_controller.GetDailyTodo)
+	r.GET("/todo/daily/:id", todo_controller.GetDailyTodo)
 	r.POST("/todo/daily", todo_controller.PutDailyTodo)
 
 	r.Run(port)

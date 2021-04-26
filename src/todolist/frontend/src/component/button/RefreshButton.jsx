@@ -1,23 +1,25 @@
-
 import { useCallback, useRef } from 'react';
+import { Action } from "../../hook/useTodoList";
+import axios from 'axios';
 
-export function RefreshButton({ clearTodoList, getTodolist }) {
+export function RefreshButton({ dispatch }) {
     const btnRef = useRef(null);
 
     const click = useCallback(async (e) => {
         btnRef.current.disabled = true;
         btnRef.current.classList.toggle('animate-spin');
 
-        clearTodoList();
-        await getTodolist();
+        dispatch({ type: Action.CLEAR_TODO_LIST });
+        const res = await axios.get('/todo');
+        dispatch({ type: Action.SET_TODO_LIST, payload: { todoList: res.data } });
 
         btnRef.current.disabled = false;
         btnRef.current.classList.toggle('animate-spin');
-    }, [clearTodoList, getTodolist]);
+    }, [dispatch]);
 
     return (
-        <div className='pan relative top-3 w-full sm:w-11/12 md:w-3/4 lg:w-2/3 h-6'>
-            <button ref={btnRef} className='absolute right-5 bottom-3 w-5 h-5 md:w-6 md:h-6 text-black dark:text-white disabled:opacity-50 focus:outline-none ' onClick={click}>
+        <div className='pan relative top-6 w-full sm:w-11/12 md:w-3/4 lg:w-2/3 h-6'>
+            <button ref={btnRef} className='absolute rounded-full right-5 bottom-3 w-5 h-5 md:w-6 md:h-6 text-black dark:text-white disabled:opacity-50 focus:outline-none ' onClick={click}>
                 <svg className='w-full h-full fill-current' viewBox="0 0 512 512" >
                     <g>
                         <g>

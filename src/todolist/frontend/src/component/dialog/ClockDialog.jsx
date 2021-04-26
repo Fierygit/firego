@@ -1,6 +1,6 @@
 import { Fragment, useState, useCallback, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { addRemindTodo } from "../util";
+import { addRemindTodo } from "../../util";
 import moment from 'moment';
 
 function Modal({ visible, confirm, cancel }) {
@@ -92,7 +92,10 @@ export function ClockDialog({ todo }) {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        document.addEventListener('keydown', event => event.key === 'Escape' && setVisible(false), false);
+        const escape = event => { if (event.key === 'Escape') setVisible(false) };
+        document.addEventListener('keydown', escape);
+
+        return () => { document.removeEventListener('keydown', escape) };
     }, [setVisible]);
 
     const confirm = async (expire) => {

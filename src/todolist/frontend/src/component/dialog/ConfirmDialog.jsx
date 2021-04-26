@@ -34,7 +34,10 @@ export function ConfirmDialog({ id, name, callback }) {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        document.addEventListener('keydown', event => event.key === 'Escape' && setVisible(false), false);
+        const escape = event => { if (event.key === 'Escape') setVisible(false) };
+        document.addEventListener('keydown', escape);
+
+        return () => { document.removeEventListener('keydown', escape) };
     }, [setVisible]);
 
     const confirm = async () => {

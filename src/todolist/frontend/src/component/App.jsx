@@ -1,8 +1,10 @@
 import { TodoList } from './TodoList';
-import { ThemeButton } from "./ThemeButton";
+import { ThemeButton } from "./button/ThemeButton";
 import { DailyRecord } from './DailyRecord';
+import { PopButton } from "./button/PopButton";
 import {
-  BrowserRouter as Router,
+  // BrowserRouter as Router,
+  HashRouter as Router,
   Switch,
   Route,
 } from "react-router-dom";
@@ -15,6 +17,7 @@ function App() {
       <Router>
         <Switch>
           <Route path="/daily/:todo_id" exact>
+            <PopButton />
             <DailyRecord />
           </Route>
           <Route path="/">

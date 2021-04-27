@@ -45,9 +45,9 @@ export function Todo({ index, todo, dispatch }) {
     }, [todo.Id, todo.Daily, dispatch]);
 
     return (
-        <div style={{ "animation": `pan ${index * 0.05 + 0.1}s ease-out 1` }} className={`flex relative group transform text-black dark:text-gray-200 w-full sm:w-11/12 md:w-3/4 lg:w-2/3 top-3 mb-1 sm:mb-2 shadow-sm hover:shadow-xl bg-white hover:bg-blue-200 dark:bg-black dark:hover:bg-blue-700 min-h-full md:h-10 items-center justify-start sm:rounded-lg border-black hover:translate-x-2 border-2 border-opacity-20 ${todo.Finished ? 'line-through' : ''}`}>
+        <div style={{ "animation": `pan ${index * 0.05 + 0.1}s ease-out 1` }} className={`flex relative group transform text-black dark:text-gray-200 w-full sm:w-11/12 md:w-3/4 lg:w-2/3 top-3 mb-2 py-2 shadow-sm hover:shadow-xl bg-white hover:bg-blue-200 dark:bg-black dark:hover:bg-blue-700 min-h-full md:h-10 items-center justify-start sm:rounded-lg border-black sm:hover:translate-x-2 border-2 border-opacity-20 ${todo.Finished ? 'line-through' : ''}`}>
             <input className="form-tick appearance-none checked:bg-blue-600 dark:checked:bg-green-600 border border-gray-600 dark:border-gray-400 select-none cursor-pointer mx-1 rounded-md h-6 w-6 focus:outline-none" checked={todo.Finished} type="checkbox" onChange={finishTodo}></input>
-            <span className="font-bold font-sans text-lg md:text-xl block cursor-pointer" onClick={(_) => editBtnRef.current.click()}>
+            <span className="font-bold font-sans text-xl md:text-xl block cursor-pointer" onClick={(e) => { editBtnRef.current.click() }}>
                 {todo.Name}
             </span>
             <span className='absolute text-xs hidden sm:inline md:text-base right-2 md:right-4 select-none font-medium group-hover:hidden'>
@@ -61,7 +61,7 @@ export function Todo({ index, todo, dispatch }) {
             </span>
             {
                 todo.Daily && !todo.Finished ?
-                    <span className="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
+                    <span className="flex absolute h-3 w-3 top-0 right-1 sm:right-0 -mt-1 -mr-1">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 dark:bg-red-600 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-3 w-3 bg-red-600 dark:bg-red-800"></span>
                     </span>
@@ -70,7 +70,7 @@ export function Todo({ index, todo, dispatch }) {
             }
             {
                 todo.Daily && todo.Finished ?
-                    <span className="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
+                    <span className="flex absolute h-3 w-3 top-0 right-1 sm:right-0 -mt-1 -mr-1">
                         <span className="relative inline-flex rounded-full h-3 w-3 bg-green-600 dark:bg-green-800"></span>
                     </span>
                     :

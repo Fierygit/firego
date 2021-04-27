@@ -23,8 +23,8 @@ function Modal({ todo, visible, confirm, cancel }) {
             <div className='w-full min-h-screen z-10 fixed top-0 left-0 flex items-center justify-center bg-gray-900 bg-opacity-80' onClick={cancel}>
                 <div className='flex items-center z-20 justify-center py-6 w-11/12 max-w-md flex-col text-black dark:text-gray-100 bg-gray-100 dark:bg-gray-800 rounded-xl' onClick={e => e.stopPropagation()}>
                     <div className='flex items-center justify-evenly w-full text-gray-100 dark:text-black'>
-                        <button className='rounded-lg px-3 max-w-1/5 h-7 bg-blue-400 dark:bg-blue-600 font-bold select-none focus:outline-none' onClick={checkDailyRecord}>check record</button>
-                        <button ref={btnRef} className='disabled:opacity-50 disabled:cursor-wait rounded-lg px-3 max-w-1/5 h-7 bg-green-400 dark:bg-green-600 font-bold select-none focus:outline-none' onClick={onClick}>
+                        <button className='rounded-lg px-3 max-w-1/5 h-7 bg-indigo-600 font-bold select-none focus:outline-none' onClick={checkDailyRecord}>check record</button>
+                        <button ref={btnRef} className='disabled:opacity-50 disabled:cursor-wait rounded-lg px-3 max-w-1/5 h-7 bg-blue-600 dark:bg-green-600 font-bold select-none focus:outline-none' onClick={onClick}>
                             {
                                 !daily ?
                                     <span className='font-bold md:text-lg select-none'>

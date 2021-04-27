@@ -13,7 +13,7 @@ export function RemindTodo() {
     }, []);
 
     return remindTodo.length > 0 ?
-        <span className='relative bottom-2 left-4 ring-1 ring-green-500 dark:ring-green-700 text-white font-bold bg-blue-400 dark:bg-blue-600 px-3 rounded-sm focus:outline-none select-none'>
+        <span className='relative ml-3 ring-1 ring-indigo-500 dark:ring-green-700 text-white font-bold bg-indigo-600 px-3 rounded-sm focus:outline-none select-none'>
             {`has ${remindTodo.length} remind todos`}
         </span>
         :

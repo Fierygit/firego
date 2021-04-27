@@ -33,7 +33,7 @@ func Run(port string) {
 	r.POST("/todo/edit", todo_controller.EditTodo)
 
 	r.GET("/todo/daily/:id", todo_controller.GetDailyTodo)
-	r.POST("/todo/daily", todo_controller.PutDailyTodo)
+	r.POST("/todo/daily", todo_controller.ToggleDailyTodo)
 
 	r.Run(port)
 }

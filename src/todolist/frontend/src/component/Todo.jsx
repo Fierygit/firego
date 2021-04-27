@@ -46,7 +46,7 @@ export function Todo({ index, todo, dispatch }) {
 
     return (
         <div style={{ "animation": `pan ${index * 0.05 + 0.1}s ease-out 1` }} className={`flex relative group transform text-black dark:text-gray-200 w-full sm:w-11/12 md:w-3/4 lg:w-2/3 top-3 mb-1 sm:mb-2 shadow-sm hover:shadow-xl bg-white hover:bg-blue-200 dark:bg-black dark:hover:bg-blue-700 min-h-full md:h-10 items-center justify-start sm:rounded-lg border-black hover:translate-x-2 border-2 border-opacity-20 ${todo.Finished ? 'line-through' : ''}`}>
-            <input className="form-tick appearance-none checked:bg-green-400 dark:checked:bg-green-600 border border-gray-600 dark:border-gray-400 select-none cursor-pointer mx-1 rounded-md h-6 w-6 focus:outline-none" checked={todo.Finished} type="checkbox" onChange={finishTodo}></input>
+            <input className="form-tick appearance-none checked:bg-blue-600 dark:checked:bg-green-600 border border-gray-600 dark:border-gray-400 select-none cursor-pointer mx-1 rounded-md h-6 w-6 focus:outline-none" checked={todo.Finished} type="checkbox" onChange={finishTodo}></input>
             <span className="font-bold font-sans text-lg md:text-xl block cursor-pointer" onClick={(_) => editBtnRef.current.click()}>
                 {todo.Name}
             </span>

@@ -153,11 +153,20 @@ func (crud *TodoDailyCRUD) Get(user_id, todo_id string) TodoDailyModel {
 	payload := crud.db.Get(user_id, todo_id)
 	msgpack.Unmarshal([]byte(payload), &todo_daily) // no need to check error
 
-    if todo_daily.Records == nil {
-        todo_daily.Records = []string{}
-    }
+	if todo_daily.Records == nil {
+		todo_daily.Records = []string{}
+	}
 
 	return todo_daily
 }
 
 ///////////////// TodoDailyModel ////////////////////
+
+func ReverseTodoList(todolist []TodoModel) {
+	low, high := 0, len(todolist)-1
+	for low < high {
+		todolist[low], todolist[high] = todolist[high], todolist[low]
+		low++
+		high--
+	}
+}

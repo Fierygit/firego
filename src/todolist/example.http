@@ -11,7 +11,23 @@ Cookie: token={{token}}
 }
 
 ###
-GET {{base_url}}/todo HTTP/1.1
+GET {{base_url}}/todo?type=all HTTP/1.1
+content-type: application/json
+Cookie: token={{token}}  
+
+{
+}
+
+###
+GET {{base_url}}/todo?type=unfinished HTTP/1.1
+content-type: application/json
+Cookie: token={{token}}  
+
+{
+}
+
+###
+GET {{base_url}}/todo?type=finished HTTP/1.1
 content-type: application/json
 Cookie: token={{token}}  
 

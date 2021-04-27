@@ -78,7 +78,7 @@ function Modal({ visible, confirm, cancel }) {
                         </div>
                     </div>
                     <div className='flex items-center justify-evenly w-full'>
-                        <button ref={btnRef} className='disabled:opacity-50 disabled:cursor-wait rounded-lg w-1/5 h-7 bg-green-400 dark:bg-green-600 text-gray-100 dark:text-black font-bold select-none focus:outline-none' onClick={onClick}>confirm</button>
+                        <button ref={btnRef} className='disabled:opacity-50 disabled:cursor-wait rounded-lg w-1/5 h-7 bg-blue-600 dark:bg-green-600 text-gray-100 dark:text-black font-bold select-none focus:outline-none' onClick={onClick}>confirm</button>
                         <button className='bg-gray-500 w-1/5 h-7 dark:bg-gray-100 text-gray-100 dark:text-black rounded-lg font-bold select-none focus:outline-none' onClick={(_) => cancel()}>cancel</button>
                     </div>
                 </div>

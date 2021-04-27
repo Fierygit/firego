@@ -20,8 +20,13 @@ function reducer(state, action) {
         case Action.ADD_TODO:
             return { todoList: [...state.todoList, action.payload.todo] }
         case Action.UPDATE_TODO:
-            const filtered = state.todoList.filter((todo) => todo.Id !== action.payload.todo.Id);
-            return { todoList: [...filtered, action.payload.todo] }
+            const filtered = state.todoList.map((todo) => {
+                if (todo.Id !== action.payload.todo.Id)
+                    return todo;
+
+                return action.payload.todo;
+            });
+            return { todoList: [...filtered] }
         default:
             throw new Error();
     }
@@ -32,7 +37,7 @@ export function useTodoList() {
 
     useEffect(() => {
         const getTodolist = async () => {
-            const res = await axios.get('/todo');
+            const res = await axios.get('/todo?type=unfinished');
             dispatch({ type: Action.SET_TODO_LIST, payload: { todoList: res.data } });
         };
         getTodolist();

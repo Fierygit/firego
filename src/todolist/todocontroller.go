@@ -45,13 +45,52 @@ func (ctl *TodoController) AddTodo(c *gin.Context) {
 }
 
 func (ctl *TodoController) GetTodo(c *gin.Context) {
+	query_type := c.DefaultQuery("type", "unfinished")
 	user_id := getUserId(c)
 	todo_list, err := ctl.todo_crud.BatchGet(user_id)
 	if util.CheckAndResponseError(err, c) {
 		return
 	}
 
-	c.JSON(http.StatusOK, todo_list)
+	filtered_todo_list := []TodoModel{}
+	daily_todos := []TodoModel{}
+	switch query_type {
+	case "all":
+		for _, t := range todo_list {
+			if t.Daily {
+				daily_todos = append(daily_todos, t)
+				continue
+			}
+			filtered_todo_list = append(filtered_todo_list, t)
+		}
+	case "finished":
+		for _, t := range todo_list {
+			if t.Finished && t.Daily {
+				daily_todos = append(daily_todos, t)
+				continue
+			}
+			if t.Finished && util.IsBefore1Day(t.Id) {
+				filtered_todo_list = append(filtered_todo_list, t)
+			}
+		}
+		ReverseTodoList(filtered_todo_list)
+	case "unfinished":
+		fallthrough
+	default:
+		for _, t := range todo_list {
+			if t.Daily {
+				daily_todos = append(daily_todos, t)
+				continue
+			}
+			if !t.Finished || t.Finished && !util.IsBefore1Day(t.Id) {
+				filtered_todo_list = append(filtered_todo_list, t)
+			}
+		}
+	}
+
+	filtered_todo_list = append(daily_todos, filtered_todo_list...)
+
+	c.JSON(http.StatusOK, filtered_todo_list)
 }
 
 func (ctl *TodoController) RemoveTodo(c *gin.Context) {
@@ -143,13 +182,14 @@ func (ctl *TodoController) GetDailyTodo(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"Id":      todo.Id,
-		"todo":    todo.Name,
-		"records": todo_daily.Records,
+		"Id":       todo.Id,
+		"todo":     todo.Name,
+		"finished": todo.Finished,
+		"records":  todo_daily.Records,
 	})
 }
 
-func (ctl *TodoController) PutDailyTodo(c *gin.Context) {
+func (ctl *TodoController) ToggleDailyTodo(c *gin.Context) {
 	type DailyTodoReq struct {
 		Id    string `form:"id" json:"id" binding:"required"`
 		Daily bool   `form:"daily" json:"daily" binding:"required"`

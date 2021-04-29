@@ -63,6 +63,7 @@ func (ctl *TodoController) GetTodo(c *gin.Context) {
 			}
 			filtered_todo_list = append(filtered_todo_list, t)
 		}
+		ReverseTodoList(filtered_todo_list)
 	case "finished":
 		for _, t := range todo_list {
 			if t.Finished && t.Daily {

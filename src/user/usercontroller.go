@@ -20,7 +20,7 @@ func NewUserController() UserController {
 }
 
 const (
-	max_age = 60 * 60 * 24 * 7
+	max_age = 60 * 60 * 24 * 30
 )
 
 func genAndSetToken(c *gin.Context, user_id string) {

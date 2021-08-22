@@ -70,7 +70,7 @@ func (ctl *TodoController) GetTodo(c *gin.Context) {
 				daily_todos = append(daily_todos, t)
 				continue
 			}
-			if t.Finished && util.IsBefore1Day(t.Id) {
+			if t.Finished && util.IsBeforeNDay(t.Id, 7) {
 				filtered_todo_list = append(filtered_todo_list, t)
 			}
 		}
@@ -83,7 +83,7 @@ func (ctl *TodoController) GetTodo(c *gin.Context) {
 				daily_todos = append(daily_todos, t)
 				continue
 			}
-			if !t.Finished || t.Finished && !util.IsBefore1Day(t.Id) {
+			if !t.Finished || t.Finished && !util.IsBeforeNDay(t.Id, 7) {
 				filtered_todo_list = append(filtered_todo_list, t)
 			}
 		}

@@ -66,7 +66,7 @@ func Snowflake2Unix(snowflakeId string) int64 {
 	return unixtime
 }
 
-func IsBefore1Day(snowflakeId string) bool {
+func IsBeforeNDay(snowflakeId string, N int) bool {
 	now := int64(time.Now().Unix())
-	return (now - Snowflake2Unix(snowflakeId)/1000) > 86400
+	return (now - Snowflake2Unix(snowflakeId)/1000) > 86400 * N
 }

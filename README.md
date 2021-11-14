@@ -1,22 +1,13 @@
+# 一个强大的后台
 
+a website powered by firefly & mingor
 
-### 一个强大的后台
+## how to setup server
 
-power by firefly & mingor
+```shell
+# run kv server
+go run server/kv/main.go
 
-
-
-#### run proxy
-
+# run app server
+go run app/${APP_NAME}/main.go
 ```
-sudo nohup go run main.go proxy > proxy.txt &
-```
-
-
-
-#### run home
-
-```
-sudo nohup go run main.go home > home.txt &
-```
-

@@ -13,9 +13,7 @@ import (
 	"firego/src/common/kv/server"
 	_ "firego/src/common/log"
 	"firego/src/home"
-	"firego/src/proxy"
-	"firego/src/todolist"
-	"firego/src/user"
+
 	"fmt"
 	"os"
 )
@@ -26,8 +24,6 @@ func main() {
 	// }
 
 	switch os.Args[1] {
-	case "proxy", "-p":
-		proxy.Run()
 	case "home", "-h":
 		home.Run()
 	case "leveldb", "-l":
@@ -36,10 +32,6 @@ func main() {
 		kv.TestClient(os.Args[2], os.Args[3])
 	case "beibei":
 		beibei.Run()
-	case "todolist":
-		todolist.Run(":8716")
-	case "user", "-u":
-		user.Run(":9527")
 	case "autosign":
 		autosign.Run(":9528")
 
@@ -50,10 +42,8 @@ func main() {
 		go run main.go [arguments]
 
 	The commands are:
-	-p proxy
 	-d ddl
 	-l leveldb
-	-u user
 		`
 
 		fmt.Println(usage)

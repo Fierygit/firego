@@ -6,33 +6,22 @@
  */
 package kv
 
-import (
-	"firego/src/common/kv/client"
-	"firego/src/common/util"
-	"firego/src/todolist"
-	"firego/src/user"
-	"strconv"
-	"time"
-
-	"github.com/sirupsen/logrus"
-)
-
 //TestClient test
 func TestClient(what, user_id string) {
-	switch what {
-	case "test":
-		testDB()
-	case "user":
-		getAllUser()
-	case "todo":
-		getAllTodo(user_id)
-	case "opt":
-		getAllOpt(user_id)
-	case "json2msg":
-		json2msg()
-	default:
-		logrus.Warn("invalid input")
-	}
+	// switch what {
+	// case "test":
+	// 	testDB()
+	// case "user":
+	// 	getAllUser()
+	// case "todo":
+	// 	getAllTodo(user_id)
+	// case "opt":
+	// 	getAllOpt(user_id)
+	// case "json2msg":
+	// 	json2msg()
+	// default:
+	// 	logrus.Warn("invalid input")
+	// }
 }
 
 func json2msg() {
@@ -78,49 +67,49 @@ func json2msg() {
 	// }
 }
 
-func testDB() {
-	// user_id := util.GetSnowflake().Base36()
-	user_id := "agedbfqz9f5s"
-	leveldb := client.NewConnector().SetSize(2).Connect(client.PRE_TEST, "123456")
+// func testDB() {
+// 	// user_id := util.GetSnowflake().Base36()
+// 	user_id := "agedbfqz9f5s"
+// 	leveldb := client.NewConnector().SetSize(2).Connect(client.PRE_TEST, "123456")
 
-	logrus.Info(user_id)
+// 	logrus.Info(user_id)
 
-	key := ""
-	for i := 0; i < 10; i++ {
-		key = util.GetSnowflake().String()
-		leveldb.Put(user_id, key, strconv.Itoa(i))
-	}
+// 	key := ""
+// 	for i := 0; i < 10; i++ {
+// 		key = util.GetSnowflake().String()
+// 		leveldb.Put(user_id, key, strconv.Itoa(i))
+// 	}
 
-	time.Sleep(time.Second * 3)
+// 	time.Sleep(time.Second * 3)
 
-	for i, t := range leveldb.BatchGet(user_id) {
-		logrus.Info(i, t)
-	}
-}
+// 	for i, t := range leveldb.BatchGet(user_id) {
+// 		logrus.Info(i, t)
+// 	}
+// }
 
-func getAllUser() {
-	user_crud := user.NewUserCRUD()
-	user_list, _ := user_crud.BatchGet()
+// func getAllUser() {
+// 	user_crud := user.NewUserCRUD()
+// 	user_list, _ := user_crud.BatchGet()
 
-	for i, u := range user_list {
-		logrus.Info(i, u)
-	}
-}
+// 	for i, u := range user_list {
+// 		logrus.Info(i, u)
+// 	}
+// }
 
-func getAllTodo(user_id string) {
-	todo_crud := todolist.NewTodoCRUD()
+// func getAllTodo(user_id string) {
+// 	todo_crud := todolist.NewTodoCRUD()
 
-	todo_list, _ := todo_crud.BatchGet(user_id)
+// 	todo_list, _ := todo_crud.BatchGet(user_id)
 
-	for i, todo := range todo_list {
-		logrus.Info(i, todo)
-	}
-}
+// 	for i, todo := range todo_list {
+// 		logrus.Info(i, todo)
+// 	}
+// }
 
-func getAllOpt(user_id string) {
-	leveldb := client.NewConnector().SetSize(2).Connect(client.PRE_OPT, "123456")
+// func getAllOpt(user_id string) {
+// 	leveldb := client.NewConnector().SetSize(2).Connect(client.PRE_OPT, "123456")
 
-	for i, todo := range leveldb.BatchGet(user_id) {
-		logrus.Info(i, todo)
-	}
-}
+// 	for i, todo := range leveldb.BatchGet(user_id) {
+// 		logrus.Info(i, todo)
+// 	}
+// }

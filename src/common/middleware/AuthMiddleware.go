@@ -49,7 +49,10 @@ func AuthMiddleware() gin.HandlerFunc {
 			logrus.Info("parse token fail", err)
 			redirect(ctx)
 			ctx.Abort()
-		} else if claims.ExpiresAt < now {
+			return
+		}
+
+		if claims.ExpiresAt < now {
 			logrus.Info("jwt timeout ", now, claims.ExpiresAt)
 			redirect(ctx)
 			ctx.Abort()

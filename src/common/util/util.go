@@ -67,6 +67,6 @@ func Snowflake2Unix(snowflakeId string) int64 {
 }
 
 func IsBeforeNDay(snowflakeId string, N int) bool {
-	now := int64(time.Now().Unix())
-	return (now - Snowflake2Unix(snowflakeId)/1000) > 86400 * N
+	now := time.Now().Unix()
+	return (now - Snowflake2Unix(snowflakeId)/1000) > int64(86400*N)
 }
